@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root{
+    --main: 22 22 22;
+    --secondary: 255 150 0;
+    --coffee : 122 89 66;
+    --third: 6 6 6;
+    --fourth: 255 255 255;
+    --firth: 28 28 35;
+    --sixth : 108 108 108;
+    --cover: 1 18 31;
+    --true : 6 148 22;
+    --text : 158 171 137;
+    --transparent : transparent;
+
+    --showContainerSize : 50rem;
+
+  }
+}
