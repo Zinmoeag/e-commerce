@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+// For Admin Group
+Route::middleware(['auth','is_admin'])->group(function(){});
