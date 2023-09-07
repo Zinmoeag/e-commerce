@@ -20,4 +20,8 @@ class SaleController extends Controller
     public function signUp(){
         return view('pos.sign-up');
     }
+
+    public function forgotPassword(){
+        return view('pos.forgotPassword');
+    }
 }

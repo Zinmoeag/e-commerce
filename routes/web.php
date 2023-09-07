@@ -32,6 +32,7 @@ Route::prefix('pos')->group(function(){
 
     Route::get('/sign-in', [SaleController::class, 'signIn']);
     Route::get('/sign-up', [SaleController::class, 'signUp']);
+    Route::get('/forgot-password', [SaleController::class, 'forgotPassword']);
 
 
 
