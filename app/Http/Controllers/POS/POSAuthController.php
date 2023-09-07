@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\POS;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
 class POSAuthController extends Controller
 {
     public function login(Request $request){
-                
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -27,10 +29,10 @@ class POSAuthController extends Controller
 
 
         $credential =  $request->only('email','password');
-        
-        $userType = User::where('email',$request['email'])->count() > 0 ? User::where('email',$request['email'])->first()->user_type : ''; 
-                     
-        if(Auth::attempt($credential) && $userType == "pos"){           
+
+        $userType = User::where('email',$request['email'])->count() > 0 ? User::where('email',$request['email'])->first()->user_type : '';
+
+        if(Auth::attempt($credential) && $userType == "pos"){
             return redirect('/pos');
         }
         else{
