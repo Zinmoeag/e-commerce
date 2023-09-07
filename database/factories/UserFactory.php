@@ -20,8 +20,11 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->unique()->phoneNumber(),
+            'address' => fake()->address(),
+            'photo' => 'https://i0.wp.com/picjumbo.com/wp-content/uploads/secretary-portrait-free-photo.jpg?w=600&quality=80',
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => fake()->password(8, 50),
             'remember_token' => Str::random(10),
         ];
     }

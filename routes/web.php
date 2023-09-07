@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\POS\SaleController;
 use App\Http\Controllers\POS\POSAuthController;
+use App\Http\Controllers\ProductController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +18,19 @@ use App\Http\Controllers\POS\POSAuthController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('app');
-// });
+Route::get('/', function () {
+    return view('app');
+});
+
+Route::get('/products', [ProductController::class, 'index']);
+
+
+
+
+
+
 // For Admin Group
 //Route::middleware(['auth','is_admin'])->group(function(){});
-
 
 
 //signIn
