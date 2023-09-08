@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\POS\SaleController;
 use App\Http\Controllers\POS\POSAuthController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,8 +21,7 @@ use App\Http\Controllers\POS\POSAuthController;
 //     return view('app');
 // });
 // For Admin Group
-//Route::middleware(['auth','is_admin'])->group(function(){});
-
+Route::middleware(['auth','is_admin'])->group(function(){});
 
 
 //signIn
@@ -40,7 +40,7 @@ Route::prefix('pos')->group(function(){
 
     Route::get('/logout',function() {
         Auth::logout();
-        return redirect('/pos');      
-    });    
+        return redirect('/pos');
+    });
 
 });
