@@ -1,9 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\POS\SaleController;
 use App\Http\Controllers\POS\POSAuthController;
+
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -17,14 +21,46 @@ use App\Http\Controllers\POS\POSAuthController;
 |
 */
 
-// Route::get('/', function () {
-//     return view('app');
-// });
-// For Admin Group
-Route::middleware(['auth','is_admin'])->group(function(){});
+//Route::get('/', function () {
+//    return view('app');
+//});
 
 
-//signIn
+
+Route::prefix('admin')->group(function(){
+
+    // get started
+    Route::get('/', function () {        
+        return view('admin.auth.login');
+    });
+
+    Route::post('/login', [AuthController::class, 'login']);
+
+    Route::get('/logout',function() {
+        Auth::logout();
+        return redirect('/admin');
+    });
+
+    
+
+        // For Admin Group
+        Route::middleware(['check-admin-auth'])->group(function(){
+        
+            //users
+            Route::resource('users',UserController::class); //user create
+    
+            //brands
+            Route::resource('brands',BrandController::class); //CRUD
+        });
+});
+
+
+
+
+
+
+
+//signIn => POS
 
 Route::prefix('pos')->group(function(){
     Route::get('/', [SaleController::class, 'index']);
@@ -40,7 +76,7 @@ Route::prefix('pos')->group(function(){
 
     Route::get('/logout',function() {
         Auth::logout();
-        return redirect('/pos');
-    });
+        return redirect('/pos');      
+    });    
 
 });
