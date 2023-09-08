@@ -11,11 +11,18 @@ use Illuminate\Support\Facades\Hash;
 class UserProfileApiController extends Controller
 {
 // ------------------------------------------------------------------
-    // For User Edit Profile
+
+
+    // User Profile Edit
     public function UserProfileEdit(){
         $user = auth()->user();
-        return $user;
+        return response()->json([
+            'status'=>200,
+            'user'=>$user
+        ],200);
     }
+
+// User Profile Store
     public function UserProfileStore(Request $request){
         $user = auth()->user();
         $validator = Validator::make($request->all(),[
@@ -41,17 +48,39 @@ class UserProfileApiController extends Controller
             $user['photo'] = $filename;
         }
         $user->save();
+        if($user){
+            return response()->json([
+                'status'=>'Profile Updated Successfully',
+                'user'=>$user
+            ],200);
+        }else{
+            return response()->json([
+                'status'=>404,
+                'user'=>"No found user"
+            ]);
+        }
 
 
-        return response()->json(['message'=>'Profile Updated Successfully']);
+
     }
 // -----------------------------------------------------------
     // For Change Password
     public function UserChangePassword(){
         $user = Auth::user();
-        return $user;
+        if($user){
+            return response()->json([
+                'status'=>'User Change Password Successfully',
+                'user'=>$user
+            ],200);
+        }else{
+            return response()->json([
+                'status'=>404,
+                'user'=>'No User Found'
+            ],404);
+        }
     }
 
+    // User Password Update
     public function UserUpdatePassword(Request $request)
     {
         $user = Auth::user();

@@ -26,6 +26,6 @@ Route::controller(UserProfileApiController::class)->group(function () {
 
     // For change Password
     Route::get('user/password/change', 'UserChangePassword');
-    Route::post('user/password/update', 'UserUpdatePassword');
+    Route::match(['get','post'],'user/password/update', 'UserUpdatePassword');
 });
 
