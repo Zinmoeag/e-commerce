@@ -4,8 +4,9 @@ import { faCartShopping, faUser, faBars, faMagnifyingGlass, faXmark } from '@for
 const IconBtn = ({onClick, icon}) => {
 	return (
 		<button 
+			type="button"
 			className="hover:text-indigo-400"
-			onClick={onClick}
+			onClick={() => onClick()}
 		>
 			<FontAwesomeIcon icon={icon} />
 		</button>

@@ -56,27 +56,45 @@ Route::prefix('admin')->group(function(){
 
 
 
+Route::prefix('/pos')->group(function(){
 
-
-
-
-//signIn => POS
-
-Route::prefix('pos')->group(function(){
     Route::get('/', [SaleController::class, 'index']);
+    Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
+
+    // Route::get('/', [SaleController::class, 'index']);
 
 
-    Route::get('/sign-in', [SaleController::class, 'signIn']);
-    Route::get('/sign-up', [SaleController::class, 'signUp']);
-    Route::get('/forgot-password', [SaleController::class, 'forgotPassword']);
+    // Route::get('/sign-in', [SaleController::class, 'signIn']);
+    // Route::get('/sign-up', [SaleController::class, 'signUp']);
+    // Route::get('/login', [SaleController::class, 'login']);
+    // Route::get('/forgot-password', [SaleController::class, 'forgotPassword']);
 
 
 
-    Route::post('/login', [POSAuthController::class, 'login']);
+    // Route::post('/login', [POSAuthController::class, 'login']);
 
-    Route::get('/logout',function() {
-        Auth::logout();
-        return redirect('/pos');      
-    });    
+    // Route::get('/logout',function() {
+    //     Auth::logout();
+    //     return redirect('/pos');      
+    // });    
+
 
 });
+
+
+//protect by guest
+Route::prefix('guest')->group(function(){
+    Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
+});
+
+
+//protect by auth
+
+Route::prefix('profile')->group(function(){
+    Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
+});
+
+
+
+
+

@@ -3,7 +3,7 @@ import AuthSlide from './Auth/Index'
 const AuthContainer = ({isShow, setIsShow}) => {
 
 	const AuthContainer = {
-		transform : isShow ? "translateX(0)" : "translateX(100%)",
+		transform : isShow ? "translateX(0)" : "translateX(500%)",
 		transition : "transform 200ms",
 	}
 

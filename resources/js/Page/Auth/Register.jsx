@@ -21,7 +21,7 @@ const Register = () => {
 			className="Register text-sm pt-10 h-[100vh] flex items-center px-10 text-slate-600"
 			>
 
-				<div className="w-[30rem] text-sm px-4 py-2">
+				<div className="w-[25rem] md:w-[30rem] text-sm px-4 py-2">
 					<div className="mb-4">
 						<h3 className="text-2xl font-bold uppercase mb mb-1">Create A New Account</h3>
 						<p className="bg-slate-400 text-white py-1 px-2">Sign in for free</p>
