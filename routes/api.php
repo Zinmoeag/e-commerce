@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\BrandApiController;
-use App\Http\Controllers\CategoryApiController;
-use App\Http\Controllers\ProductApiController;
-use App\Http\Controllers\UserApiController;
+use App\Http\Controllers\API\ProductApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,8 +19,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::apiResource('/products', ProductApiController::class);
-Route::apiResource('/brands', BrandApiController::class);
-Route::apiResource('/categories', CategoryApiController::class);
-Route::apiResource('/users', UserApiController::class);
+// Product
+Route::get('/products', [ProductApiController::class, 'index']);
+Route::post('/products', [ProductApiController::class, 'store']);
