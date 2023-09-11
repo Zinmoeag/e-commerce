@@ -1,20 +1,28 @@
 import {Outlet} from 'react-router-dom'
 import Nav from '../Components/Nav'
-import Bg1 from '../Assets/imgs/bg1.jpg'
+import Cart from '../Page/Cart'
+import {useState} from "react"
 
 const AppLayout = () => {
+
+
+	const [isCartShow, setIsCartShow] = useState(false)
+
 	return (
 		<>
-			<section className="bg-slate-50">
-				<Nav />
-				<div className="h-[15rem] bg-green-500 overflow-hidden relative">
-					<img 
-					className="absolute bottom-0 right-0"
-					src={Bg1} 
-					alt=""
-					 />
+			<section className="bg-indigo-100" >
+				<Nav
+					setIsCartShow={setIsCartShow}
+				/>
+				<div className="mt-[4rem] bg-indigo-100">
+					<Outlet />
 				</div>
-				<Outlet />
+
+				<Cart
+					isShow= {isCartShow}
+					setIsShow = {setIsCartShow}
+				/>
+
 			</section>
 		</>
 	)

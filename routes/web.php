@@ -1,11 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 use App\Http\Controllers\POS\SaleController;
 use App\Http\Controllers\POS\POSAuthController;
-use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Auth;
+
+use App\Http\Controllers\BrandController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,37 +22,76 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('app');
-});
-
-Route::get('/products', [ProductController::class, 'index']);
+// Route::get('/', function () {
+//    return view('app');
+// });
 
 
 
+Route::prefix('admin')->group(function(){
 
 
+    // get started
+    Route::get('/', function () {        
+        return view('admin.auth.login');
+    });
 
-// For Admin Group
-//Route::middleware(['auth','is_admin'])->group(function(){});
-
-
-//signIn
-
-Route::prefix('pos')->group(function(){
-    Route::get('/', [SaleController::class, 'index']);
-
-
-    Route::get('/sign-in', [SaleController::class, 'signIn']);
-    Route::get('/sign-up', [SaleController::class, 'signUp']);
-
-
-
-    Route::post('/login', [POSAuthController::class, 'login']);
+    Route::post('/login', [AuthController::class, 'login']);
 
     Route::get('/logout',function() {
         Auth::logout();
-        return redirect('/pos');      
-    });    
+        return redirect('/admin');
+    });
 
+    
+
+        // For Admin Group
+        Route::middleware(['check-admin-auth'])->group(function(){
+        
+            //users
+            Route::resource('users',UserController::class); //user create
+    
+            //brands
+            Route::resource('brands',BrandController::class); //CRUD
+        });
+});
+
+
+
+Route::prefix('/pos')->group(function(){
+
+    Route::get('/', [SaleController::class, 'index']);
+    Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
+
+    // Route::get('/', [SaleController::class, 'index']);
+
+
+    // Route::get('/sign-in', [SaleController::class, 'signIn']);
+    // Route::get('/sign-up', [SaleController::class, 'signUp']);
+    // Route::get('/login', [SaleController::class, 'login']);
+    // Route::get('/forgot-password', [SaleController::class, 'forgotPassword']);
+
+
+
+    // Route::post('/login', [POSAuthController::class, 'login']);
+
+    // Route::get('/logout',function() {
+    //     Auth::logout();
+    //     return redirect('/pos');      
+    // });    
+
+
+});
+
+
+//protect by guest
+Route::prefix('guest')->group(function(){
+    Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
+});
+
+
+//protect by auth
+
+Route::prefix('profile')->group(function(){
+    Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
 });

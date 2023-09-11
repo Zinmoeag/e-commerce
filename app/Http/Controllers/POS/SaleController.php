@@ -12,12 +12,4 @@ class SaleController extends Controller
         return view('pos.index');
  
     }
-
-    public function signIn(){
-        return view('pos.sign-in');
-    }
-
-    public function signUp(){
-        return view('pos.sign-up');
-    }
 }

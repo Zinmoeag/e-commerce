@@ -8,10 +8,7 @@
 @endsection
 
 @section('content')
-<div>
-     This is Point of Sale Page Index page. POS file Path  
-     
-</div>
+    
     
 @endsection
 

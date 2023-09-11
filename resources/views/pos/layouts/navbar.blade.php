@@ -1,30 +1,15 @@
-<nav class="navbar navbar-expand-lg bg-danger">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="{{ url('/pos') }}">Laracamp</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">        
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('/pos/cart') }}">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="badge bg-dark" id="item-qty">0</span>
-                </a>                
-            </li>
-            <li class="nav-item">                
-                @if(Auth::user())
-                    <a class="nav-link" href="{{ url('/pos/logout') }}">Sign Out</a>
-                @endif
+<div class="fixed h-[2rem] top-0 left-0 right-0 text-slate-800 bg-white z-50">
+    <div class="flex justify-end items-center mx-4">
 
-                @if(!Auth::user())
-                    <a class="nav-link" href="{{ url('/pos/sign-in') }}">Sign In</a>
-                @endif                
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url('/pos/sign-up') }}">Sign Up</a>
-            </li>                                    
-        </ul>
+        <div>
+            <a href="/guest/login" class="hover:text-skin-coffee">
+                Login
+            </a>
+            <span>/</span>
+            <a href="/guest/register" class="hover:text-skin-coffee">
+                Register
+            </a>
+            
         </div>
     </div>
-</nav>
+</div>

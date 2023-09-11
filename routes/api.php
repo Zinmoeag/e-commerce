@@ -1,8 +1,12 @@
 <?php
 
-use App\Http\Controllers\API\ProductApiController;
+use App\Http\Controllers\Api\BrandApiController;
+use App\Http\Controllers\Api\CategoryApiController;
+use App\Http\Controllers\Api\ProductApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UserProfileApiController;
+use GuzzleHttp\Handler\Proxy;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +19,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::apiResource('/products', ProductApiController::class);
+Route::apiResource('/brands', BrandApiController::class);
+Route::apiResource('/categories', CategoryApiController::class);
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Product
-Route::get('/products', [ProductApiController::class, 'index']);
-Route::post('/products', [ProductApiController::class, 'store']);
+
+// For UserProfileApiController
+Route::controller(UserProfileApiController::class)->group(function () {
+    // For User Edit Profile
+    Route::get('user/profile/edit', 'UserProfileEdit');
+    Route::match(['get', 'post'], 'user/profile/store', 'UserProfileStore');
+
+    // For change Password
+    Route::get('user/password/change', 'UserChangePassword');
+    Route::match(['get','post'],'user/password/update', 'UserUpdatePassword');
+});
