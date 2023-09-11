@@ -32,7 +32,7 @@ Route::prefix('admin')->group(function(){
 
 
     // get started
-    Route::get('/', function () {        
+    Route::get('/', function () {
         return view('admin.auth.login');
     });
 
@@ -43,14 +43,14 @@ Route::prefix('admin')->group(function(){
         return redirect('/admin');
     });
 
-    
+
 
         // For Admin Group
         Route::middleware(['check-admin-auth'])->group(function(){
-        
+
             //users
             Route::resource('users',UserController::class); //user create
-    
+
             //brands
             Route::resource('brands',BrandController::class); //CRUD
         });
@@ -63,25 +63,7 @@ Route::prefix('/pos')->group(function(){
     Route::get('/', [SaleController::class, 'index']);
     Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
 
-    // Route::get('/', [SaleController::class, 'index']);
-
-
-    // Route::get('/sign-in', [SaleController::class, 'signIn']);
-    // Route::get('/sign-up', [SaleController::class, 'signUp']);
-    // Route::get('/login', [SaleController::class, 'login']);
-    // Route::get('/forgot-password', [SaleController::class, 'forgotPassword']);
-
-
-
-    // Route::post('/login', [POSAuthController::class, 'login']);
-
-    // Route::get('/logout',function() {
-    //     Auth::logout();
-    //     return redirect('/pos');      
-    // });    
-
-
-});
+ });
 
 
 //protect by guest
