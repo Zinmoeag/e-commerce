@@ -21,7 +21,7 @@ class UserProfileApiController extends Controller
             'user'=>$user
         ],200);
     }
-
+// -------------------------------------------------------------------------
 // User Profile Store
     public function UserProfileStore(Request $request){
         $user = auth()->user();
@@ -79,7 +79,7 @@ class UserProfileApiController extends Controller
             ],404);
         }
     }
-
+// -----------------------------------------------------------------------
     // User Password Update
     public function UserUpdatePassword(Request $request)
     {
@@ -90,7 +90,7 @@ class UserProfileApiController extends Controller
             'new_password' => 'required|confirmed|min:8',
         ]);
 
-        if (Hash::check($request->old_password, $user->password)) {
+        if (bcrypt($request->old_password, $user->password)) {
             $user->password = Hash::make($request->new_password);
             $user->save();
             return response()->json(['message' => 'Password changed successfully']);
@@ -98,4 +98,70 @@ class UserProfileApiController extends Controller
 
         return response()->json(['error' => 'Old password is incorrect'], 400);
     }
+// --------------------------------------------------------------------------
+        // For Store register
+        public function RegisterStore(Request $request){
+            $validator = Validator::make($request->all(),[
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required', 'confirmed'],
+                'password_confirmation'=>['required']
+            ]);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            };
+
+            $user = User::create([
+                'name'=>$request->input('name'),
+                'email'=>$request->input('email'),
+                'password'=>bcrypt($request->input('password'))
+            ]);
+            return response()->json(['message'=>'User Created Account Successfully']);
+        }
+// ---------------------------------------------------------------------
+
+        // For Show user
+
+        public function showUser(){
+            $user = User::all();
+            if($user){
+                return response()->json([
+                    'message'=>'These are all users',
+                    'user'=>$user
+                ],200);
+            }else{
+                return response()->json([
+                    'message'=>'Users are not found',
+                    'user'=>''
+                ],404);
+            };
+        }
+
+// --------------------------------------------------------------------
+     // For User Login
+        public function UserLogin(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'email' => ['required', 'string', 'email', 'max:255'],
+        'password' => ['required'],
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['error' => $validator->errors()], 400);
+    }
+
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+        return response()->json([
+            'message' => 'Login Successfully',
+            'user' => $user,
+        ]);
+    } else {
+        return response()->json(['message' => 'Email and password do not match'], 401);
+    }
+}
+// ---------------------------------------------------------
+
 }
