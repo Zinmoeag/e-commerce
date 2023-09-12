@@ -45,5 +45,6 @@ Route::controller(UserProfileApiController::class)->group(function () {
     Route::get('/register','RegisterStore');
     Route::match(['get','post'],'/show/user','showUser');
     Route::get('/login','UserLogin');
+    Route::post('/logout','UserLogout');
 
 });
