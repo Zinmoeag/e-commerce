@@ -26,10 +26,11 @@ use App\Http\Controllers\UserController;
 //    return view('app');
 // });
 
-
+Route::get("/",function () {
+    return redirect("/pos");
+});
 
 Route::prefix('admin')->group(function(){
-
 
     // get started
     Route::get('/', function () {
@@ -67,13 +68,12 @@ Route::prefix('/pos')->group(function(){
 
 
 //protect by guest
-Route::prefix('guest')->group(function(){
+Route::prefix('/guest')->middleware("guest")->group(function(){
     Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
 });
 
 
 //protect by auth
-
-Route::prefix('profile')->group(function(){
+Route::prefix('user')->group(function(){
     Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
 });

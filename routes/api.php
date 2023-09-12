@@ -23,9 +23,14 @@ Route::apiResource('/products', ProductApiController::class);
 Route::apiResource('/brands', BrandApiController::class);
 Route::apiResource('/categories', CategoryApiController::class);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+// Route::get('/user', function (Request $request) {
+//     return response()->json([
+//         'user' => auth()->user(),
+//     ],200);
+// });
+
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -42,9 +47,14 @@ Route::controller(UserProfileApiController::class)->group(function () {
     Route::match(['get','post'],'user/password/update', 'UserUpdatePassword');
 
     // For User Register and login
-    Route::get('/register','RegisterStore');
+    Route::post('/register','RegisterStore');
     Route::match(['get','post'],'/show/user','showUser');
+<<<<<<< HEAD
     Route::get('/login','UserLogin');
     Route::post('/logout','UserLogout');
+=======
+    Route::post('/login','UserLogin');
+>>>>>>> d30666dc6a084db7b35a0a06fdfe34d03a59e8aa
 
 });
+

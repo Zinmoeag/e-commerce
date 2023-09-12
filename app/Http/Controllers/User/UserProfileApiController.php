@@ -107,8 +107,9 @@ class UserProfileApiController extends Controller
                 'password' => ['required', 'confirmed'],
                 'password_confirmation'=>['required']
             ]);
+
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                return response()->json(['message' => $validator->errors()], 422);
             };
 
             $user = User::create([
@@ -116,7 +117,10 @@ class UserProfileApiController extends Controller
                 'email'=>$request->input('email'),
                 'password'=>bcrypt($request->input('password'))
             ]);
-            return response()->json(['message'=>'User Created Account Successfully']);
+
+            auth()->login($user);
+
+            return response()->json(['message'=>'User Created Account Successfully'],200);
         }
 // ---------------------------------------------------------------------
 
@@ -137,27 +141,31 @@ class UserProfileApiController extends Controller
             };
         }
 
+        
+
 // --------------------------------------------------------------------
      // For User Login
-        public function UserLogin(Request $request)
-{
+    public function UserLogin(Request $request)
+    {
     $validator = Validator::make($request->all(), [
         'email' => ['required', 'string', 'email', 'max:255'],
         'password' => ['required'],
     ]);
 
     if ($validator->fails()) {
-        return response()->json(['error' => $validator->errors()], 400);
+        return response()->json(['error' => $validator->errors()], 422);
     }
 
     $credentials = $request->only('email', 'password');
 
     if (Auth::attempt($credentials)) {
         $user = Auth::user();
+            
         return response()->json([
             'message' => 'Login Successfully',
             'user' => $user,
-        ]);
+        ],200);
+
     } else {
         return response()->json(['message' => 'Email and password do not match'], 401);
     }

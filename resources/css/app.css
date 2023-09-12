@@ -1,6 +1,14 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+
+/* MY New ADDED */
+/* resources/css/app.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 
 @layer base {
   :root{
@@ -20,4 +28,9 @@
     --showContainerSize : 50rem;
 
   }
+}
+
+html{
+  scroll-margin-top: 7rem;
+  scroll-behavior: smooth;
 }
