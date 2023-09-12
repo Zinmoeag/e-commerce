@@ -3,13 +3,13 @@
 @section('style')
 @endsection
 
-@section('navbar')    
+@section('navbar')
     @parent
 @endsection
 
 @section('content')
-    
-    
+
+
 @endsection
 
 @section('script')

@@ -171,5 +171,17 @@ class UserProfileApiController extends Controller
     }
 }
 // ---------------------------------------------------------
+// For user logout
+public function UserLogout(Request $request){
+    if (auth()->check()) {
+        auth()->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return response()->json(['message' => 'Logout Successfully']);
+    } else {
+        return response()->json(['message' => 'User Logout Fail']);
+    }
+
+}
 
 }

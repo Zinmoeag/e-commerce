@@ -23,14 +23,9 @@ Route::apiResource('/products', ProductApiController::class);
 Route::apiResource('/brands', BrandApiController::class);
 Route::apiResource('/categories', CategoryApiController::class);
 
-
-// Route::get('/user', function (Request $request) {
-//     return response()->json([
-//         'user' => auth()->user(),
-//     ],200);
-// });
-
-
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -50,6 +45,6 @@ Route::controller(UserProfileApiController::class)->group(function () {
     Route::post('/register','RegisterStore');
     Route::match(['get','post'],'/show/user','showUser');
     Route::post('/login','UserLogin');
+    Route::match(['get','post'],'/logout','UserLogout');
 
 });
-
