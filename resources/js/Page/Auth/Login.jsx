@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../Components/Input";
 import { useForm } from "react-hook-form";
+import {useEffect, useState} from 'react';
+import useAuth from '../../Hooks/useAuth'
 
 const Login = () => {
     const {
@@ -9,10 +11,30 @@ const Login = () => {
         watch,
         formState: { errors },
     } = useForm();
+    const navigate = useNavigate();
+    const [error,setError] = useState({});
+    const [status, setStatus] = useState(null);
+
+    const {login} = useAuth({
+        url:'/api/login'
+    });
+
+    console.log(error)
 
     const onSubmit = (cleanData) => {
-        console.log(cleanData);
+        login({
+            data:cleanData,
+            setError,
+            setStatus
+        })
     };
+
+
+    if(status === 200){
+        navigate(0)
+    }
+
+
 
     return (
         <div>
@@ -41,7 +63,7 @@ const Login = () => {
                                 label="Your Email"
                                 type="text"
                                 placeholder="Enter Email"
-                                error={errors.email || {}}
+                                 error={errors.email ? errors.email.message : error ? error.email : null}
                             />
 
                             <Input
@@ -54,14 +76,17 @@ const Login = () => {
                                     },
                                 })}
                                 label="password"
-                                type="text"
+                                type="password"
                                 placeholder="password"
-                                error={errors.password || {}}
+                                error={errors.password ? errors.password.message : error ? error.password : null}
                             />
 
+                            {error.message && <p className="text-red-600">{error.message}</p>}
+                            
                             <a href="/guest/forgot-password">
                                 Forgot Password?
                             </a>
+
 
                             <button
                                 type="submit"

@@ -1,6 +1,8 @@
 import Input from '../../Components/Input';
+import {useEffect} from 'react';
 import {Link} from 'react-router-dom'
 import { useForm } from "react-hook-form"
+import useAuth from '../../Hooks/useAuth'
 
 const Register = () => {
 
@@ -11,11 +13,18 @@ const Register = () => {
 	    formState: { errors },
 	  } = useForm()
 
+	  const {getUser} = useAuth({
+	  	url:null
+	  });
+
 	  const onSubmit = (cleanData) => {
 	  		console.log(cleanData)
 	  }
 
+
 	  console.log(errors)
+
+
 
 	return (
 			<div 
@@ -34,7 +43,7 @@ const Register = () => {
 								label="Email"
 								type="text"
 								placeholder="Enter Email"
-								error={errors.email || {}}
+								error={errors.email ? errors.email : error.email || {}}
 							/>
 
 

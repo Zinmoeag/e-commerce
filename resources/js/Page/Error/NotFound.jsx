@@ -17,7 +17,6 @@ const NotFound = () => {
                         <Link to="/pos" className="text-blue-600 mt-6">Go Back</Link>
                      </div>
 
-
                 </div>
 
 

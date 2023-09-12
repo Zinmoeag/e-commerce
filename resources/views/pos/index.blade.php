@@ -1,4 +1,4 @@
-@extends('pos.layouts.app')
+@extends('app')
 
 @section('style')
 @endsection

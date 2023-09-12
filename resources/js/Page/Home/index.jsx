@@ -7,8 +7,9 @@ const Home = () => {
 		<div>
 			<Swiper />
 			{/*<Categories />*/}
-
-			<Brand />
+			<section id="brand">
+				<Brand />
+			</section>
 
 			<BestSeller />
 		</div>
