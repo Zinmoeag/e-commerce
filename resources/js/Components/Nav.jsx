@@ -45,9 +45,27 @@ const Nav = ({setIsCartShow}) => {
 						</div>
 					</div>
 
+
+
+					<div className={`${isMobileSearchBarShow ? "translate-x-0" : "translate-x-[500%]"} md:translate-x-0 lg:w-[40rem] md:w-[28rem] w-[95%] md:relative absolute top-[5rem] md:top-0 transition-all duration-200`}>
+						<Searcher 
+							setIsShow={setIsMobileSearchBarShow}
+						/>
+					</div>
+
 					{/*controlls*/}
 
 					<div className="flex gap-8">
+
+	
+						<div className='md:hidden'>
+							 <IconBtn
+								icon={faMagnifyingGlass}
+								onClick={() => {setIsMobileSearchBarShow(true)}}
+
+							 />
+						</div>
+
 
 						 <IconBtn
 							icon={faCartShopping}
@@ -81,7 +99,8 @@ const Nav = ({setIsCartShow}) => {
 							innerText={"Our Products"}
 							menu={dropdownMenu}
 						/>		
-						<Link to="/pos/brands" className="hover:text-skin-secondary">Brands</Link>
+						{/*<Link to="#brand" className="hover:text-skin-secondary">Brands</Link>*/}
+						<a href="#brand" className="hover:text-skin-secondary">Brands</a>
 						<Link to="/contact" className="hover:text-skin-secondary">Contact Us</Link>
 						<Link to="/about" className="hover:text-skin-secondary">About Us</Link>
 					</nav>
