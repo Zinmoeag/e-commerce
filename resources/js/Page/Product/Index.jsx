@@ -18,12 +18,13 @@ const Product = () => {
 		<div className="relative">
 
 			<div className="hidden lg:block">
-				<div className="fixed top-0 bg-white shadow-lg h-[100vh] w-[16rem] pt-[10rem] text-slate-600">
+				<ul className="fixed top-0 h-[100vh] w-[16rem] pt-[10rem] text-slate-600">
 
-				
-				<CategoryDropDown />
+					<li className="my-2">
+						<CategoryDropDown />
+					</li>
 
-				</div>
+				</ul>
 
 			</div>
 

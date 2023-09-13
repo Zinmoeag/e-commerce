@@ -14,7 +14,7 @@ const AppLayout = () => {
 				<Nav
 					setIsCartShow={setIsCartShow}
 				/>
-				<div className="mt-[7rem] bg-indigo-100">
+				<div className="mt-[5.8rem] pt-10 bg-slate-100">
 					<Outlet />
 				</div>
 
