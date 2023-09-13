@@ -141,7 +141,7 @@ class UserProfileApiController extends Controller
             };
         }
 
-        
+
 
 // --------------------------------------------------------------------
      // For User Login
@@ -160,7 +160,7 @@ class UserProfileApiController extends Controller
 
     if (Auth::attempt($credentials)) {
         $user = Auth::user();
-            
+
         return response()->json([
             'message' => 'Login Successfully',
             'user' => $user,

@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from "react";
 import Input from "../../Components/Input";
 import { useForm } from "react-hook-form";
-import useAuth from '../../Hooks/useAuth'
+import useAuth from "../../Hooks/useAuth";
 
 const Register = () => {
     const {
@@ -12,26 +12,24 @@ const Register = () => {
         formState: { errors },
     } = useForm();
     const navigate = useNavigate();
-    const [error, setError] = useState({})
-    const [status, setStatus] = useState(null)
+    const [error, setError] = useState({});
+    const [status, setStatus] = useState(null);
 
-    const {signUp, getUser} = useAuth({
-        url:"/api/register",
-    })
+    const { signUp, getUser } = useAuth({
+        url: "/api/register",
+    });
 
     const onSubmit = (cleanData) => {
         signUp({
-            data:cleanData,
+            data: cleanData,
             setError,
-            setStatus
-        })
+            setStatus,
+        });
     };
 
-
-    if(status === 200){
-        navigate(0)
+    if (status === 200) {
+        navigate(0);
     }
-
 
     return (
         <div>
@@ -60,7 +58,13 @@ const Register = () => {
                                 label="Your Name"
                                 type="text"
                                 placeholder="Enter your name"
-                                error={errors.name ? errors.name.message : error ? error.name : null}
+                                error={
+                                    errors.name
+                                        ? errors.name.message
+                                        : error
+                                        ? error.name
+                                        : null
+                                }
                             />
                             <Input
                                 {...register("email", {
@@ -74,7 +78,13 @@ const Register = () => {
                                 label="Your Email"
                                 type="text"
                                 placeholder="Enter Email"
-                                error={errors.email ? errors.email.message : error ? error.email : null}
+                                error={
+                                    errors.email
+                                        ? errors.email.message
+                                        : error
+                                        ? error.email
+                                        : null
+                                }
                             />
 
                             <Input
@@ -89,7 +99,13 @@ const Register = () => {
                                 label="password"
                                 type="password"
                                 placeholder="password"
-                                error={errors.password ? errors.password.message : error ? error.password : null}
+                                error={
+                                    errors.password
+                                        ? errors.password.message
+                                        : error
+                                        ? error.password
+                                        : null
+                                }
                             />
 
                             <Input
@@ -104,7 +120,11 @@ const Register = () => {
                                 label="Confirm password"
                                 type="password"
                                 placeholder="Confirm password"
-                                error={errors.password_confirmation ? errors.password_confirmation.message : null}
+                                error={
+                                    errors.password_confirmation
+                                        ? errors.password_confirmation.message
+                                        : null
+                                }
                             />
 
                             <button

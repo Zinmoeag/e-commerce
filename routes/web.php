@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
@@ -77,3 +78,6 @@ Route::prefix('/guest')->middleware("guest")->group(function(){
 Route::prefix('user')->group(function(){
     Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
 });
+
+
+
