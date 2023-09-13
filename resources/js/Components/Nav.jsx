@@ -27,7 +27,7 @@ const Nav = ({setIsCartShow}) => {
 		<div className="fixed top-[2rem] left-0 right-0 z-40 text-skin-coffee shadow-lg fixed">
 			<div className="bg-white shadow-lg border-b-4 border-skin-coffee/50 backdrop-blur-sm">
 				
-				<div className="flex justify-between py-5 md:px-10 px-4">
+				<div className="flex justify-between py-3 md:px-10 px-4">
 					<div className="flex gap-4">
 						<div>
 							<button

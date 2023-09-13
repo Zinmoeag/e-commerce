@@ -9,7 +9,7 @@ const useAuth = ({url=null}) => {
 
 	const csrf = () => axiosClient.get("/sanctum/csrf-cookie");
 
-	const getUser =  () => axiosClient.get('/api/user')
+	const getUser =  () => axiosClient.get('/api/user').then(res => console.log(res)).catch(err => console.log(err))
 
 
 

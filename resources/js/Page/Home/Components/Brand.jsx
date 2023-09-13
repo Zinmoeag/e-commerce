@@ -9,7 +9,6 @@ const Brand = () => {
 
 	const {data,loading, error} = useFetcher(url)
 
-
 	return (
 		<div>
 			<h3 className="text-2xl uppercase text-center mt-10">Our Collected Brands</h3>
