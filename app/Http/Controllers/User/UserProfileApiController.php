@@ -23,46 +23,49 @@ class UserProfileApiController extends Controller
     }
 // -------------------------------------------------------------------------
 // User Profile Store
-    public function UserProfileStore(Request $request){
-        $user = auth()->user();
-        $validator = Validator::make($request->all(),[
-            'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:email',
-            'address' => 'required|string',
-            'phone' => 'required|string',
-            'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-        if($validator->fails()){
-            return response()->json(['error'=>$validator->errors()],400);
-        }
-
-        $user->name = $request->username;
-        $user->email = $request->email;
-        $user->address = $request->address;
-        $user->phone = $request->phone;
-        if($request->file('photo')){
-            $file = $request->file('photo');
-            @unlink(public_path('uploads/admin_imgs'.$user->photo));
-            $filename = uniqid() . $file->getClientOriginalName();
-            $file->move(public_path('uploads/user_img/'),$filename);
-            $user['photo'] = $filename;
-        }
-        $user->save();
-        if($user){
-            return response()->json([
-                'status'=>'Profile Updated Successfully',
-                'user'=>$user
-            ],200);
-        }else{
-            return response()->json([
-                'status'=>404,
-                'user'=>"No found user"
-            ]);
-        }
-
-
-
+public function UserProfileStore(Request $request)
+{
+    $user = auth()->user();
+    if (!$user) {
+        return response()->json([
+            'status' => 401,
+            'message' => 'Unauthorized',
+        ], 401);
     }
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'address' => 'required|string',
+        'phone' => 'required|string',
+        'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['error' => $validator->errors()], 400);
+    }
+
+    $user->name = $request->input('name');
+    $user->email = $request->input('email');
+    $user->address = $request->input('address');
+    $user->phone = $request->input('phone');
+
+    if ($request->file('photo')) {
+        $file = $request->file('photo');
+        @unlink(public_path('uploads/user_img/' . $user->photo));
+        $filename = uniqid() . $file->getClientOriginalName();
+        $file->move(public_path('uploads/user_img/'), $filename);
+        $user->photo = $filename;
+    }
+
+    $user->save();
+
+    return response()->json([
+        'status' => 200,
+        'message' => 'Profile Updated Successfully',
+        'user' => $user,
+    ]);
+}
+
 // -----------------------------------------------------------
     // For Change Password
     public function UserChangePassword(){
@@ -167,16 +170,7 @@ class UserProfileApiController extends Controller
             'user' => $user,
         ],200);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-                
-            return response()->json([
-                'message' => 'Login Successfully',
-                'user' => $user,
-            ],200);
-
-
-        } else {
+} else {
             return response()->json(['message' => 'Email and password do not match'], 401);
         }
     }
