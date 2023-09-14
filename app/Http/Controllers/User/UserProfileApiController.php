@@ -141,7 +141,7 @@ class UserProfileApiController extends Controller
             };
         }
 
-        
+
 
 // --------------------------------------------------------------------
      // For User Login
@@ -158,6 +158,15 @@ class UserProfileApiController extends Controller
 
         $credentials = $request->only('email', 'password');
 
+
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+
+        return response()->json([
+            'message' => 'Login Successfully',
+            'user' => $user,
+        ],200);
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
                 
@@ -165,6 +174,7 @@ class UserProfileApiController extends Controller
                 'message' => 'Login Successfully',
                 'user' => $user,
             ],200);
+
 
         } else {
             return response()->json(['message' => 'Email and password do not match'], 401);

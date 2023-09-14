@@ -17,8 +17,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $data = Brand::get();        
-        
+        $data = Brand::get();
+
         return view('admin.pos.brands.index')
             ->with('data',$data);
     }

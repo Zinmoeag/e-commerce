@@ -39,8 +39,8 @@ Route::controller(UserProfileApiController::class)->group(function () {
     Route::match(['get','post'],'user/password/update', 'UserUpdatePassword');
 
     // For User Register and login
-    Route::post('/register','RegisterStore');
+    Route::match(['get','post'],'/register','RegisterStore');
     Route::match(['get','post'],'/show/user','showUser');
-    Route::post('/login','UserLogin');
+    Route::match(['get','post'],'/login','UserLogin');
     Route::match(['get','post'],'/logout','UserLogout');
 });
