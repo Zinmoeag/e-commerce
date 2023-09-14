@@ -23,10 +23,6 @@ use App\Http\Controllers\UserController;
 |
 */
 
-// Route::get('/', function () {
-//    return view('app');
-// });
-
 Route::get("/",function () {
     return redirect("/pos");
 });
@@ -46,16 +42,15 @@ Route::prefix('admin')->group(function(){
     });
 
 
+    // For Admin Group
+    Route::middleware(['check-admin-auth'])->group(function(){
 
-        // For Admin Group
-        Route::middleware(['check-admin-auth'])->group(function(){
+        //users
+        Route::resource('users',UserController::class); //user create
 
-            //users
-            Route::resource('users',UserController::class); //user create
-
-            //brands
-            Route::resource('brands',BrandController::class); //CRUD
-        });
+        //brands
+        Route::resource('brands',BrandController::class); //CRUD
+    });
 });
 
 
@@ -75,7 +70,7 @@ Route::prefix('/guest')->middleware("guest")->group(function(){
 
 
 //protect by auth
-Route::prefix('user')->group(function(){
+Route::prefix('/user')->middleware("auth")->group(function(){
     Route::get('/{any}', [SaleController::class, 'index'])->where('any', '.*');
 });
 

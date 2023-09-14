@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+
 class UserProfileApiController extends Controller
 {
 // ------------------------------------------------------------------
-
 
     // User Profile Edit
     public function UserProfileEdit(){
@@ -147,16 +147,17 @@ class UserProfileApiController extends Controller
      // For User Login
     public function UserLogin(Request $request)
     {
-    $validator = Validator::make($request->all(), [
-        'email' => ['required', 'string', 'email', 'max:255'],
-        'password' => ['required'],
-    ]);
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'string', 'email', 'max:255'],
+            'password' => ['required'],
+        ]);
 
-    if ($validator->fails()) {
-        return response()->json(['error' => $validator->errors()], 422);
-    }
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
 
-    $credentials = $request->only('email', 'password');
+        $credentials = $request->only('email', 'password');
+
 
     if (Auth::attempt($credentials)) {
         $user = Auth::user();
@@ -166,22 +167,31 @@ class UserProfileApiController extends Controller
             'user' => $user,
         ],200);
 
-    } else {
-        return response()->json(['message' => 'Email and password do not match'], 401);
-    }
-}
-// ---------------------------------------------------------
-// For user logout
-public function UserLogout(Request $request){
-    if (auth()->check()) {
-        auth()->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return response()->json(['message' => 'Logout Successfully']);
-    } else {
-        return response()->json(['message' => 'User Logout Fail']);
-    }
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+                
+            return response()->json([
+                'message' => 'Login Successfully',
+                'user' => $user,
+            ],200);
 
-}
+
+        } else {
+            return response()->json(['message' => 'Email and password do not match'], 401);
+        }
+    }
+// ---------------------------------------------------------
+    // For user logout
+    public function UserLogout(Request $request){
+        if (auth()->check()) {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return response()->json(['message' => 'Logout Successfully']);
+        } else {
+            return response()->json(['message' => 'User Logout Fail']);
+        }
+
+    }
 
 }

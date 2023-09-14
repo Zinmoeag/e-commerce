@@ -8,6 +8,7 @@ import Register from './Page/Auth/Register'
 import ForgotPassword from './Page/Auth/ForgotPassword'
 import Login from './Page/Auth/Login'
 import Profile from './Page/User/Profile'
+import Edit from './Page/User/Edit'
 
 
 const router = createBrowserRouter([
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
 			{
 				path:"user/profile",
 				element : <Profile />,
+			},
+			{
+				path:"user/edit",
+				element : <Edit />,
 			},
 			{
 				path:"guest/forgot-password",
