@@ -39,16 +39,19 @@ class ProductApiController extends Controller
         if ($validator->fails()) {
             return $validator->errors();
         } else {
-            $result = Product::create([
+            $image_path =  request()->file('image') ? request()->file('image')->store('image', 'images') : null;
+            $formData = [
                 'name' => request()->name,
                 'product_code' => request()->product_code,
                 'category_id' => request()->category_id,
                 'brand_id' => request()->brand_id,
-                'image' => request()->file('image')->store('product_img'),
+                'image' => $image_path,
                 'description' => request()->description,
                 'stock_qty' => request()->stock_qty,
                 'price' => request()->price
-            ]);
+            ];
+            
+            $result = Product::create($formData);
             if ($result) {
                 return ['Result' => 'Data has been saved'];
             } else {
@@ -86,18 +89,23 @@ class ProductApiController extends Controller
         if ($validator->fails()) {
             return $validator->errors();
         } else {
-            $formData = [
-                'name' => request()->name,
-                'product_code' => request()->product_code,
-                'category_id' => request()->category_id,
-                'brand_id' => request()->brand_id,
-                'description' => request()->description,
-                'stock_qty' => request()->stock_qty,
-                'price' => request()->price
-            ];
-            $formData['image'] = request()->file('image') ? request()->file('image')->store('product_img') : $product->image;
+            // if (request()->hasFile('image')) {
+            //     $image = request()->image;
+            //     $fileName = date('Y') . $image->getClientOriginalName();
+            //     request()->image->storeAs('image', $fileName, 'public');
+            //     $product['image'] = $fileName;
+            // }
+            if (request()->hasFile('image')) {
+                $image = request()->image;
+                $fileName = date('Y') . $image->getClientOriginalName();
+        
+            //Get the path to the folder where the image is stored 
+            //and then save the path in database
+                $path = request()->image->storeAs('image', $fileName, 'images');
+                $product['image'] = $path;
+            }
 
-            $result = $product->update($formData);
+            $result = $product->update(request()->all());
             
             if ($result) {
                 return ['Result' => 'Data has been updated'];
@@ -119,5 +127,9 @@ class ProductApiController extends Controller
         } else {
             return ['Result' => 'Operation Fail'];
         }
+    }
+
+    public function search($name) {
+        return Product::where('name', 'LIKE', '%'. $name . '%')->get();
     }
 }

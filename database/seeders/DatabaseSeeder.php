@@ -18,37 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $levis = Brand::factory()->create([
-            'name' => 'Levis',
-            'slug' => 'levis'
+        
+        User::factory()->create([
+            'name' => 'TestUser',
+            'email' => 'user@gmail.com',
+            'password' => 'user'
         ]);
-
-        $adidas = Brand::factory()->create([
-            'name' => 'adidas',
-            'slug' => 'adidas'
-        ]);
-
-        $shirt = Category::factory()->create([
-            'name' => 'shirt',
-            'slug' => 'shirt'
-        ]);
-
-        $shoe = Category::factory()->create([
-            'name' => 'shoe',
-            'slug' => 'shoe'
-        ]);
-
-        Product::factory(2)->create([
-            'category_id' => $shirt->id,
-            'brand_id' => $adidas->id
-        ]);
-
-        Product::factory(2)->create([
-            'category_id' => $shoe->id,
-            'brand_id' => $levis->id
-        ]);
-    
-        User::factory(4)->create();
         User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@gmail.com',

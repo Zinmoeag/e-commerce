@@ -46,7 +46,7 @@ class UserProfileApiController extends Controller
             $filename = uniqid() . $file->getClientOriginalName();
             $file->move(public_path('uploads/user_img/'),$filename);
             $user['photo'] = $filename;
-        }
+        };
         $user->save();
         if($user){
             return response()->json([
@@ -99,29 +99,29 @@ class UserProfileApiController extends Controller
         return response()->json(['error' => 'Old password is incorrect'], 400);
     }
 // --------------------------------------------------------------------------
-        // For Store register
-        public function RegisterStore(Request $request){
-            $validator = Validator::make($request->all(),[
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
-                'password' => ['required', 'confirmed'],
-                'password_confirmation'=>['required']
-            ]);
+    // For Store register
+    public function RegisterStore(Request $request){
+        $validator = Validator::make($request->all(),[
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed'],
+            'password_confirmation'=>['required']
+        ]);
 
-            if ($validator->fails()) {
-                return response()->json(['message' => $validator->errors()], 422);
-            };
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 422);
+        };
 
-            $user = User::create([
-                'name'=>$request->input('name'),
-                'email'=>$request->input('email'),
-                'password'=>bcrypt($request->input('password'))
-            ]);
+        $user = User::create([
+            'name'=>$request->input('name'),
+            'email'=>$request->input('email'),
+            'password'=>bcrypt($request->input('password'))
+        ]);
 
-            auth()->login($user);
+        auth()->login($user);
 
-            return response()->json(['message'=>'User Created Account Successfully'],200);
-        }
+        return response()->json(['message'=>'User Created Account Successfully'],200);
+    }
 // ---------------------------------------------------------------------
 
         // For Show user
@@ -154,44 +154,36 @@ class UserProfileApiController extends Controller
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
-        }
+        };
 
         $credentials = $request->only('email', 'password');
 
 
-    if (Auth::attempt($credentials)) {
-        $user = Auth::user();
-
-        return response()->json([
-            'message' => 'Login Successfully',
-            'user' => $user,
-        ],200);
-
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-                
+
             return response()->json([
-                'message' => 'Login Successfully',
-                'user' => $user,
+            'message' => 'Login Successfully',
+            'user' => $user,
             ],200);
-
-
         } else {
             return response()->json(['message' => 'Email and password do not match'], 401);
-        }
+        };
     }
 // ---------------------------------------------------------
     // For user logout
     public function UserLogout(Request $request){
-        if (auth()->check()) {
-            auth()->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return response()->json(['message' => 'Logout Successfully']);
-        } else {
-            return response()->json(['message' => 'User Logout Fail']);
+            if (auth()->check()) {
+                auth()->logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                return response()->json(['message' => 'Logout Successfully']);
+            } else {
+                return response()->json(['message' => 'User Logout Fail']);
+            }
+        
         }
-
-    }
-
 }
+
+
+// 

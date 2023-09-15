@@ -19,9 +19,11 @@ use GuzzleHttp\Handler\Proxy;
 |
 */
 
+// For Product, Brand, Category CRUD and Search Feature
 Route::apiResource('/products', ProductApiController::class);
-Route::apiResource('/brand', BrandApiController::class);
+Route::apiResource('/brands', BrandApiController::class);
 Route::apiResource('/categories', CategoryApiController::class);
+Route::get('/search/{name}', [ProductApiController::class, 'search']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();

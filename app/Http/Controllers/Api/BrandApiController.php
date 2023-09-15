@@ -24,7 +24,7 @@ class BrandApiController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name' => ['required', 'max:255', Rule::unique('brans', 'name')],
+            'name' => ['required', 'max:255', Rule::unique('brands', 'name')],
             'slug' => ['required', 'max:255', Rule::unique('brands', 'slug')],
         ];
 
@@ -33,10 +33,13 @@ class BrandApiController extends Controller
         if ($validator->fails()) {
             return $validator->errors();
         } else {
-            $result = Brand::create([
+            $formData = [
                 'name' => request()->name,
                 'slug' => request()->slug
-            ]);
+            ];
+
+            $formData['photo'] = request()->file('photo') ? request()->file('photo')->store('/brands_images') : null;
+            $result = Brand::create($formData);
             if ($result) {
                 return ['Result' => 'Data has been saved'];
             } else {
@@ -58,7 +61,7 @@ class BrandApiController extends Controller
      */
     public function update($id)
     {
-        $product = Brand::findOrFail($id);
+        $brand = Brand::findOrFail($id);
         $rules = [
             'name' => ['required', 'max:255', Rule::unique('brands', 'name')->ignore($id)],
             'slug' => ['required', 'max:255', Rule::unique('brands', 'slug')->ignore($id)]
@@ -73,7 +76,8 @@ class BrandApiController extends Controller
                 'name' => request()->name,
                 'slug' => request()->slug,
             ];
-            $result = $product->update($formData);
+            $formData['photo'] = request()->file('photo') ? request()->file('photo')->store('/brands_images') : $brand->photo;
+            $result = $brand->update($formData);
             if ($result) {
                 return ['Result' => 'Brand has been updated'];
             } else {
