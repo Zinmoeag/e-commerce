@@ -24,20 +24,20 @@ class UserProfileApiController extends Controller
 // -------------------------------------------------------------------------
 // User Profile Store
     public function UserProfileStore(Request $request){
-        $user = auth()->user();
+        $user = Auth::user();
+
         $validator = Validator::make($request->all(),[
             'username' => 'required|string|max:255',
-            'email' => 'required|email|unique:email',
             'address' => 'required|string',
             'phone' => 'required|string',
             'photo' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
         if($validator->fails()){
-            return response()->json(['error'=>$validator->errors()],400);
+            return response()->json(['message'=>$validator->errors()],422);
         }
 
         $user->name = $request->username;
-        $user->email = $request->email;
         $user->address = $request->address;
         $user->phone = $request->phone;
         if($request->file('photo')){
@@ -47,7 +47,10 @@ class UserProfileApiController extends Controller
             $file->move(public_path('uploads/user_img/'),$filename);
             $user['photo'] = $filename;
         }
+        
         $user->save();
+
+
         if($user){
             return response()->json([
                 'status'=>'Profile Updated Successfully',
@@ -90,10 +93,10 @@ class UserProfileApiController extends Controller
             'new_password' => 'required|confirmed|min:8',
         ]);
 
-        if (bcrypt($request->old_password, $user->password)) {
+        if (Hash::check($request->old_password, $user->password)) {
             $user->password = Hash::make($request->new_password);
             $user->save();
-            return response()->json(['message' => 'Password changed successfully']);
+            return response()->json(['message' => 'Password changed successfully'],200);
         }
 
         return response()->json(['error' => 'Old password is incorrect'], 400);
@@ -158,15 +161,6 @@ class UserProfileApiController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-
-    if (Auth::attempt($credentials)) {
-        $user = Auth::user();
-
-        return response()->json([
-            'message' => 'Login Successfully',
-            'user' => $user,
-        ],200);
-
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
                 
@@ -175,11 +169,12 @@ class UserProfileApiController extends Controller
                 'user' => $user,
             ],200);
 
-
         } else {
             return response()->json(['message' => 'Email and password do not match'], 401);
         }
     }
+
+
 // ---------------------------------------------------------
     // For user logout
     public function UserLogout(Request $request){
@@ -187,9 +182,9 @@ class UserProfileApiController extends Controller
             auth()->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-            return response()->json(['message' => 'Logout Successfully']);
+            return response()->json(['message' => 'Logout Successfully'],204);
         } else {
-            return response()->json(['message' => 'User Logout Fail']);
+            return response()->json(['message' => 'User Logout Fail'],400);
         }
 
     }
