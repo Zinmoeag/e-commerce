@@ -23,6 +23,7 @@ class UserProfileApiController extends Controller
     }
 // -------------------------------------------------------------------------
 // User Profile Store
+  
     public function UserProfileStore(Request $request){
         $user = Auth::user();
 
@@ -62,10 +63,8 @@ class UserProfileApiController extends Controller
                 'user'=>"No found user"
             ]);
         }
+}
 
-
-
-    }
 // -----------------------------------------------------------
     // For Change Password
     public function UserChangePassword(){
@@ -161,13 +160,15 @@ class UserProfileApiController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-                
-            return response()->json([
-                'message' => 'Login Successfully',
-                'user' => $user,
-            ],200);
+
+
+    if (Auth::attempt($credentials)) {
+        $user = Auth::user();
+
+        return response()->json([
+            'message' => 'Login Successfully',
+            'user' => $user,
+        ],200);
 
         } else {
             return response()->json(['message' => 'Email and password do not match'], 401);
