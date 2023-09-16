@@ -9,6 +9,7 @@ import ForgotPassword from './Page/Auth/ForgotPassword'
 import Login from './Page/Auth/Login'
 import Profile from './Page/User/Profile'
 import Edit from './Page/User/Edit'
+import ChangePassword from './Page/User/ChangePassword'
 
 
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
 			{
 				path:"user/edit",
 				element : <Edit />,
+			},
+			{
+				path:"user/change-password",
+				element : <ChangePassword />,
 			},
 			{
 				path:"guest/forgot-password",

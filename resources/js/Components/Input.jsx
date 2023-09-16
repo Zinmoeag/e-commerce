@@ -1,8 +1,9 @@
 import React,{useState} from 'react'
 
-const Input = React.forwardRef(({name,label,type,placeholder,error, onChange, onBlur},ref) => {
+const Input = React.forwardRef(({name,label,type,value,placeholder,error, onChange, onBlur},ref) => {
 
 	// console.log(error)
+
 	return (
 	<>
 		<div className="flex flex-col w-full my-2">
@@ -11,6 +12,7 @@ const Input = React.forwardRef(({name,label,type,placeholder,error, onChange, on
 			<input
 				name={name}
 				ref={ref}
+
 				onChange={onChange} 
 				onBlur={onBlur}
 				className="border-b-2 py-1 px-2 border-skin-coffee bg-skin-transparent w-full mt-2 outline-none"
