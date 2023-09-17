@@ -23,6 +23,7 @@ class UserProfileApiController extends Controller
     }
 // -------------------------------------------------------------------------
 // User Profile Store
+  
     public function UserProfileStore(Request $request){
         $user = Auth::user();
 
@@ -62,8 +63,8 @@ class UserProfileApiController extends Controller
                 'user'=>"No found user"
             ]);
         }
-
     }
+
 // -----------------------------------------------------------
     // For Change Password
     public function UserChangePassword(){
@@ -121,7 +122,8 @@ class UserProfileApiController extends Controller
 
 // --------------------------------------------------------------------------
         // For Store register
-        public function RegisterStore(Request $request){
+        public function RegisterStore(Request $request)
+        {
             $validator = Validator::make($request->all(),[
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
@@ -147,7 +149,8 @@ class UserProfileApiController extends Controller
 
         // For Show user
 
-        public function showUser(){
+        public function showUser()
+        {
             $user = User::all();
             if($user){
                 return response()->json([
@@ -179,9 +182,11 @@ class UserProfileApiController extends Controller
 
         $credentials = $request->only('email', 'password');
 
+
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
-                
+
             return response()->json([
                 'message' => 'Login Successfully',
                 'user' => $user,
