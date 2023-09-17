@@ -38,6 +38,9 @@ Route::controller(UserProfileApiController::class)->middleware('auth:sanctum')->
     Route::get('user/password/change', 'UserChangePassword');
     Route::match(['get','post'],'user/password/update', 'UserUpdatePassword');
 
+    //For email update
+    Route::post('user/email/update', 'UserUpdateEmail');
+
     // For User Register and login
     Route::match(['get','post'],'/show/user','showUser');
     // Route::match(['get','post'],'/logout','UserLogout');

@@ -16,6 +16,7 @@ const useAuth = ({url}) => {
 	const getUser = () => {
 		axiosClient.get('/api/user')
 		.then(res => {
+
 			if(res.status === 200){
 				dispatch(setAuthUserSuccess({
 					user : res.data,
@@ -98,6 +99,27 @@ const useAuth = ({url}) => {
 			})
 	}
 
+	const updateEmail = async ({data, setStatus, setError}) => {
+
+		// console.log(url, data)
+
+		await csrf();
+		axiosClient.post(url,data)
+			.then(res => {
+				setStatus(res.status)
+			})
+			.catch(err => {
+				if(err.response.status === 422){
+					setError(err.response.data.errors)
+				}
+
+				if(err.response.status === 400){
+					setError(err.response.data)
+					setStatus(err.response.status)
+				}
+			})
+	}
+
 	return {
 		authUser : user,
 		authStatus : status,
@@ -106,6 +128,7 @@ const useAuth = ({url}) => {
 		login,
 		logout,
 		updatePassword,
+		updateEmail,
 	}
 }
 

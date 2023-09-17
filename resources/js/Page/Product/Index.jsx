@@ -1,4 +1,5 @@
 import IconBtn from '../../Components/IconBtn'
+import {useEffect} from 'react'
 import { faCartShopping, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import {useParams, useSearchParams} from 'react-router-dom';
 import withCategory from '../../Utilities/withCategory'
@@ -10,9 +11,6 @@ const Product = () => {
 	const {type} = useParams();
 
 	const [searchParams, setSearchParams]  = useSearchParams();
-
-	
-
 
 	return (
 		<div className="relative">

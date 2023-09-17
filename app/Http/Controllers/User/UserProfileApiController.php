@@ -63,8 +63,6 @@ class UserProfileApiController extends Controller
             ]);
         }
 
-
-
     }
 // -----------------------------------------------------------
     // For Change Password
@@ -101,6 +99,26 @@ class UserProfileApiController extends Controller
 
         return response()->json(['error' => 'Old password is incorrect'], 400);
     }
+
+//--------------------------------------------------------------------------
+    // user update email
+    public function UserUpdateEmail(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'new_email' => 'required|email|string|unique:users,email'
+        ]);
+
+        $user->email = $request->new_email;
+        $user->save();
+
+        return response()->json([
+            "message" => "Successfully Updated"
+        ],200);
+    }
+
+
 // --------------------------------------------------------------------------
         // For Store register
         public function RegisterStore(Request $request){
