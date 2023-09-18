@@ -16,9 +16,15 @@ class ProductApiController extends Controller
      */
     public function index()
     {
-        return  Product::all();
+        return  Product::latest()
+                ->filter(request(['search', 'category', 'brand']))
+                ->paginate(6)
+                ->withQueryString();
     }
 
+    // public function search($name){
+    //     return Product::where('name', 'Like', '%' .$name. '%')->get();
+    // }
     /**
      * Store a newly created resource in storage.
      */
