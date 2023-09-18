@@ -11,7 +11,7 @@ import DropDown from '../../../Components/DropDown'
 const link = [
 	{id:1, link:"/user/edit", name:'Update Personal Information'},
 	{id:2, link:"/user/change-password", name:'Change Password'},
-	{id:3, link:"/user/edit", name:'Change Email'},
+	{id:3, link:"/user/change-email", name:'Change Email'},
 ]
 
 const UserInfo = ({user}) => {

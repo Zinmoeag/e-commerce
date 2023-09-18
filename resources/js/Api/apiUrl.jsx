@@ -25,3 +25,7 @@ export const userInfoUpdateApi = () => {
 export const updatePasswordApi = () => {
 	return '/api/user/password/update'
 }
+
+export const updateEmailApi = () => {
+	return '/api/user/email/update'
+}

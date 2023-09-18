@@ -7,16 +7,10 @@ import DropZone from './Components/DropZone'
 import useUserProfile from '../../Hooks/useUserProfile'
 import {useSelector, useDispatch} from 'react-redux'
 import useAuth from '../../Hooks/useAuth'
+import withAuth from '../../Utilities/withAuth'
 
 
-const Edit = () => {
-
-
-	const {authUser, authStatus, getUser} = useAuth({url:null})
-
-	// console.log(authUser && authUser.name)
-
-
+const Edit = ({authUser, authStatus}) => {
 
 	const {
         register,
@@ -33,9 +27,7 @@ const Edit = () => {
 	// console.log(authUser)
 
 	useEffect(() => {
-		if(!authStatus){
-			getUser()
-		}else{
+		if(authStatus === 200){
 			setValue('username', authUser?.name)
 			setValue('phone',authUser?.phone)
 			setValue('address',authUser?.address)
@@ -128,11 +120,9 @@ const Edit = () => {
 					</div>
 				</div>
 
-
-
 			</section>
 		</>
 	)
 }
 
-export default Edit;
+export default withAuth(Edit);

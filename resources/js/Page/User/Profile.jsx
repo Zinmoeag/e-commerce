@@ -1,24 +1,11 @@
 import UserInfo from './Components/UserInfo'
 import {useEffect} from 'react'
 import OrderList from './Components/OrderList'
-import useAuth from '../../Hooks/useAuth'
+import withAuth from '../../Utilities/withAuth'
+
 import {useNavigate, redirect} from 'react-router-dom'
 
-const Profile = () => {
-
-
-	const {authUser, authStatus, getUser} = useAuth({url:null})
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		if(!authStatus){
-			getUser()
-		}else if(authStatus === 401){
-			navigate(0)
-		}
-	},[authStatus])
-
-	if(authStatus === 200){
+const Profile = ({authUser, authStatus}) => {
 
 		return (
 			<>
@@ -40,12 +27,10 @@ const Profile = () => {
 				</section>
 			</>
 		)
-	}
-
 
 }
 
-export default Profile
+export default withAuth(Profile);
 
 
 
