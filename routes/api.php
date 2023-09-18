@@ -18,10 +18,15 @@ use GuzzleHttp\Handler\Proxy;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
+//Get Api for products
 Route::apiResource('/products', ProductApiController::class);
 Route::apiResource('/brand', BrandApiController::class);
 Route::apiResource('/categories', CategoryApiController::class);
+
+//Another Way
+// Route::get('/products/search/{name}', [ProductApiController::class, 'search']);
+// Route::get('/products/{name}', [ProductApiController::class, 'dropdown']);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
