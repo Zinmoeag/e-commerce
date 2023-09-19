@@ -18,12 +18,15 @@ use GuzzleHttp\Handler\Proxy;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-
-// For Product, Brand, Category CRUD and Search Feature
+//Get Api for products
 Route::apiResource('/products', ProductApiController::class);
 Route::apiResource('/brands', BrandApiController::class);
 Route::apiResource('/categories', CategoryApiController::class);
-Route::get('/search/{name}', [ProductApiController::class, 'search']);
+
+//Another Way
+// Route::get('/products/search/{name}', [ProductApiController::class, 'search']);
+// Route::get('/products/{name}', [ProductApiController::class, 'dropdown']);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -31,7 +34,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 // For UserProfileApiController
-Route::controller(UserProfileApiController::class)->group(function () {
+Route::controller(UserProfileApiController::class)->middleware('auth:sanctum')->group(function () {
     // For User Edit Profile
     Route::get('user/profile/edit', 'UserProfileEdit');
     Route::match(['get', 'post'], 'user/profile/store', 'UserProfileStore');
@@ -40,9 +43,16 @@ Route::controller(UserProfileApiController::class)->group(function () {
     Route::get('user/password/change', 'UserChangePassword');
     Route::match(['get','post'],'user/password/update', 'UserUpdatePassword');
 
+    //For email update
+    Route::post('user/email/update', 'UserUpdateEmail');
+
     // For User Register and login
-    Route::match(['get','post'],'/register','RegisterStore');
     Route::match(['get','post'],'/show/user','showUser');
-    Route::match(['get','post'],'/login','UserLogin');
-    Route::match(['get','post'],'/logout','UserLogout');
+    // Route::match(['get','post'],'/logout','UserLogout');
 });
+
+Route::middleware('auth:sanctum','auth:web')->post('/logout', [UserProfileApiController::class, 'UserLogout']);
+
+
+Route::post('/register',[UserProfileApiController::class, 'RegisterStore']);
+Route::post('/login',[UserProfileApiController::class, 'UserLogin']);

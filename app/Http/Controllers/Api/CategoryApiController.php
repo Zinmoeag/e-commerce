@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use App\Models\category;
 use Illuminate\Cache\Events\CacheHit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +16,7 @@ class CategoryApiController extends Controller
      */
     public function index()
     {
-        return Category::all();
+        return category::all();
     }
 
     /**
@@ -34,7 +34,7 @@ class CategoryApiController extends Controller
         if ($validator->fails()) {
             return $validator->errors();
         } else {
-            $result = Category::create([
+            $result = category::create([
                 'name' => request()->name,
                 'slug' => request()->slug
             ]);
@@ -51,7 +51,7 @@ class CategoryApiController extends Controller
      */
     public function show($id)
     {
-        return Category::findOrFail($id);
+        return category::findOrFail($id);
     }
 
     /**
@@ -59,7 +59,7 @@ class CategoryApiController extends Controller
      */
     public function update($id)
     {
-        $product = Category::findOrFail($id);
+        $product = category::findOrFail($id);
         $rules = [
             'name' => ['required', 'max:255', Rule::unique('brands', 'name')->ignore($id)],
             'slug' => ['required', 'max:255', Rule::unique('brands', 'slug')->ignore($id)]
@@ -88,7 +88,7 @@ class CategoryApiController extends Controller
      */
     public function destroy(string $id)
     {
-        $result = Category::findOrFail($id)->delete();
+        $result = category::findOrFail($id)->delete();
 
         if($result){
             return ['Result' => 'Item has been deleted'];

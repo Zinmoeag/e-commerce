@@ -17,3 +17,15 @@ export const login = () => {
 export const user = () => {
 	return '/api/user'
 }
+
+export const userInfoUpdateApi = () => {
+	return '/api/user/profile/store'
+}
+
+export const updatePasswordApi = () => {
+	return '/api/user/password/update'
+}
+
+export const updateEmailApi = () => {
+	return '/api/user/email/update'
+}

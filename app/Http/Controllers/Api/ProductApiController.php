@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
+use App\Models\product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -16,9 +16,9 @@ class ProductApiController extends Controller
      */
     public function index()
     {
-        return  Product::all();
+        return  product::latest()
+                ->filter(request(['search', 'category', 'brand']))->get();
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -51,7 +51,7 @@ class ProductApiController extends Controller
                 'price' => request()->price
             ];
             
-            $result = Product::create($formData);
+            $result = product::create($formData);
             if ($result) {
                 return ['Result' => 'Data has been saved'];
             } else {
@@ -65,7 +65,7 @@ class ProductApiController extends Controller
      */
     public function show($id)
     {
-        return Product::findOrFail($id);
+        return product::findOrFail($id);
     }
 
     /**
@@ -73,7 +73,7 @@ class ProductApiController extends Controller
      */
     public function update($id)
     {
-        $product = Product::findOrFail($id);
+        $product = product::findOrFail($id);
         $rules = [
             'name' => ['required', 'max:255', Rule::unique('products', 'name')->ignore($product->id)],
             'product_code' => ['required', 'numeric', Rule::unique('products', 'product_code')->ignore($product->id)],
@@ -120,16 +120,12 @@ class ProductApiController extends Controller
      */
     public function destroy(string $id)
     {
-        $result = Product::findOrFail($id)->delete();
+        $result = product::findOrFail($id)->delete();
 
         if($result){
             return ['Result' => 'Item has been deleted'];
         } else {
             return ['Result' => 'Operation Fail'];
         }
-    }
-
-    public function search($name) {
-        return Product::where('name', 'LIKE', '%'. $name . '%')->get();
     }
 }

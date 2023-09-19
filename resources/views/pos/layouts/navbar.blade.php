@@ -4,17 +4,8 @@
         @if(auth()->check())
             <div class="flex gap-2">
                 <a href="/user/profile" class="hover:text-skin-coffee">
-                    User
+                    {{auth()->user()->name}}
                 </a> 
-                <span>/</span>
-                <form method="POST" action="/auth/logout">
-                    <button
-                        type="submit"
-                        class="hover:text-skin-coffee"
-                    >   
-                        Logout
-                    </button>
-                </form>
             </div>
         @else
             <div>

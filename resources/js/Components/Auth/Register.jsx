@@ -22,7 +22,6 @@ const Register = () => {
 	  }
 
 
-	  console.log(errors)
 
 
 

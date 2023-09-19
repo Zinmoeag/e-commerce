@@ -10,7 +10,7 @@ const DropDown = ({name,data}) => {
 		<>
 			<div>
 				<button 
-					className="bg-white shadow-lg w-full py-2 flex justify-between px-4 hover:text-skin-secondary items-center"
+					className="bg-white text-blue-500 shadow-lg w-full py-2 flex justify-between px-4 hover:text-skin-secondary items-center"
 					onClick = {() => {setToggle(prev => !prev)}}
 				>
 					{name}
@@ -23,7 +23,7 @@ const DropDown = ({name,data}) => {
 					{data && data.map(item => (
 
 						<li  className="hover:bg-slate-400 px-6 py-1" key={item.id}>
-							<Link className="" to={`/pos/products/${item.slug}`}>{item.name}</Link>
+							<Link className="" to={item.link}>{item.name}</Link>
 						</li>
 
 					))}
