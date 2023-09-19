@@ -17,7 +17,7 @@ class Product extends Model
             });
         });
 
-        $query = $query->when($filter['category']??false, function($query, $slug) {
+        $query = $query->when($filter['category'] ?? false, function($query, $slug) {
             $query->whereHas('category', function($query) use($slug) {
                 $query->where('slug', $slug);
             });
@@ -33,16 +33,16 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(category::class);
     }
 
     public function brand()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->belongsTo(brand::class);
     }
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(order::class);
     }
 }
