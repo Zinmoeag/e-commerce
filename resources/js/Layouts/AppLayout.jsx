@@ -1,12 +1,15 @@
 import {Outlet} from 'react-router-dom'
 import Nav from '../Components/Nav'
 import Cart from '../Page/Cart'
-import {useState} from "react"
+import {useState, useEffect} from "react"
+import {useScroll} from '../Hooks/useScrollTop'
 
 const AppLayout = () => {
 
 
 	const [isCartShow, setIsCartShow] = useState(false)
+
+	useScroll();
 
 	return (
 		<>
@@ -14,7 +17,7 @@ const AppLayout = () => {
 				<Nav
 					setIsCartShow={setIsCartShow}
 				/>
-				<div className="mt-[5.8rem] pt-10 bg-slate-100">
+				<div className="mt-[6rem] bg-slate-100">
 					<Outlet />
 				</div>
 

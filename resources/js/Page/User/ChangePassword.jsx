@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux'
 import {updatePasswordApi} from "../../Api/ApiUrl"
 import useAuth from "../../Hooks/useAuth"
+import withAuth from "../../Utilities/withAuth"
 
-const ChangePassword = () => {
+const ChangePassword = ({authUser, authStatus}) => {
 
 	const {
         register,
@@ -28,23 +29,20 @@ const ChangePassword = () => {
     const {updatePassword} = useAuth({url:url})
 
     const onSubmit = (cleanData) => {
-
     	updatePassword({
     		data : cleanData,
     		setStatus,
     		setError : setReturnedError,
     	})
-
-
     }
 
 	return (
 		<>
-			<section id="user-edit">
+			<section id="user-change-password">
 
 				<div className="pt-4 lg:px-8 px-2 text-slate-600">
 					<div className="lg:w-[28rem] w-[22rem] h-[100vh]">
-						<h3 className="text-2xl text-slate-600 uppercase mb-6">Update Your Information</h3>
+						<h3 className="text-2xl text-slate-600 uppercase mb-6">Update Your Password</h3>
 						<form onSubmit={handleSubmit(onSubmit)}>
 
 

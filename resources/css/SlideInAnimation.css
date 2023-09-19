@@ -1,0 +1,13 @@
+.card{
+	opacity: 0;
+	transform: translateY(-30%);
+	animation: cardappear 200ms forwards;
+}
+
+
+@keyframes cardappear{
+	100%{
+		opacity:1;
+		transform: translateY(0);
+	}
+}
