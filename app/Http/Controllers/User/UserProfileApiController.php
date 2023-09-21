@@ -47,9 +47,9 @@ class UserProfileApiController extends Controller
             $filename = uniqid() . $file->getClientOriginalName();
             $file->move(public_path('uploads/user_img/'), $filename);
             $user['photo'] = $filename;
-        };
-        $user->save();
+        }
 
+        $user->save();
 
         if ($user) {
             return response()->json([

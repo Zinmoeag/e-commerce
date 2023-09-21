@@ -1,11 +1,11 @@
 import useFetcher from '../Hooks/useFetcher'
-import {categoryApi} from '../Api/apiUrl'
+import {brandApi} from '../Api/apiUrl'
 
-const withCategory = (WrappedComponent) => {
+const withBrand = (WrappedComponent) => {
 	return (props) => {
 
 
-		const url = categoryApi();
+		const url = brandApi();
 		const {data} = useFetcher(url)
 
 		return <WrappedComponent {...props} data={data} />
@@ -14,4 +14,4 @@ const withCategory = (WrappedComponent) => {
 }
 
 
-export default withCategory;
+export default withBrand;

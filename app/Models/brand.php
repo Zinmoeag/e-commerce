@@ -14,4 +14,10 @@ class Brand extends Model
         return $this->hasMany(Product::class);
     }
 
+
+    // ACCESSOR
+    protected function getPhotoAttribute($value){
+        return $value ? env('APP_URL').$value : null;
+    }
+
 }

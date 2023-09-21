@@ -19,8 +19,9 @@ use GuzzleHttp\Handler\Proxy;
 |
 */
 //Get Api for products
+
 Route::apiResource('/products', ProductApiController::class);
-Route::apiResource('/brands', BrandApiController::class);
+Route::apiResource('/brand', BrandApiController::class);
 Route::apiResource('/categories', CategoryApiController::class);
 
 //Another Way

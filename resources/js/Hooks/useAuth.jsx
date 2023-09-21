@@ -1,7 +1,7 @@
 import axiosClient from '../Libs/axios-client'
 import axios from 'axios'
 import {useEffect} from 'react' 
-import {setAuthUserSuccess, setAuthUserFail} from '../redux'
+import {setAuthUserSuccess, setAuthUserFail} from '../redux/index'
 import {useSelector, useDispatch} from 'react-redux'
 
 

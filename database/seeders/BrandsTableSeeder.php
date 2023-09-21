@@ -17,73 +17,73 @@ class BrandsTableSeeder extends Seeder
         $brand::create([
             'name' => 'Adidas',
             'slug' => 'adidas',
-            'photo' => '/public/brands_s/adidas.svg'
+            'photo' => '/brands_svg/adidas.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Augusta',
             'slug' => 'augusta',
-            'photo' => '/public/brands_s/augusta.svg'
+            'photo' => '/brands_svg/augusta.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Calvin-Klein',
             'slug' => 'calvin-klein',
-            'photo' => '/public/brands_s/calvin-klein.svg'
+            'photo' => '/brands_svg/calvin-klein.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'columbia',
             'slug' => 'columbia',
-            'photo' => '/public/brands_s/columbia.svg'
+            'photo' => '/brands_svg/columbia.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Gucci',
             'slug' => 'gucci',
-            'photo' => '/public/brands_s/gucci.svg'
+            'photo' => '/brands_svg/gucci.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Lego',
             'slug' => 'lego',
-            'photo' => '/public/brands_s/lego.svg'
+            'photo' => '/brands_svg/lego.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Nike',
             'slug' => 'nike',
-            'photo' => '/public/brands_s/nike.svg'
+            'photo' => '/brands_svg/nike.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Nivea',
             'slug' => 'nivea',
-            'photo' => '/public/brands_s/nivea.svg'
+            'photo' => '/brands_svg/nivea.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Zara',
             'slug' => 'zara',
-            'photo' => '/public/brands_s/zara.svg'
+            'photo' => '/brands_svg/zara.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Fila',
             'slug' => 'fila',
-            'photo' => '/public/brands_s/fila.svg'
+            'photo' => '/brands_svg/fila.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Puma',
             'slug' => 'puma',
-            'photo' => '/public/brands_s/puma.svg'
+            'photo' => '/brands_svg/puma.svg'
         ]);
         $brand = new brand();
         $brand::create([
             'name' => 'Vans',
             'slug' => 'vans',
-            'photo' => '/public/brands_s/vans.svg'
+            'photo' => '/brands_svg/vans.svg'
         ]);
     }
 }

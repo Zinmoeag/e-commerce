@@ -6,6 +6,15 @@ export const categoryApi = () => {
 	return '/api/categories'
 }
 
+
+export const productApi = () => {
+	return `/api/products/${type}/${query}`
+}
+
+export const productShowApi = (productCode) => {
+	return `/api/products/${productCode}`
+}
+
 export const register = () => {
 	return '/api/register'
 }
