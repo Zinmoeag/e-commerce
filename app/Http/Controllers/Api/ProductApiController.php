@@ -16,8 +16,10 @@ class ProductApiController extends Controller
      */
     public function index()
     {
-        return  product::latest()
-                ->filter(request(['search', 'category', 'brand']))->get();
+        return  Product::latest()
+                        ->filter(request(['search', 'category', 'brand']))
+                        ->paginate(6);
+
     }
     /**
      * Store a newly created resource in storage.
@@ -65,7 +67,7 @@ class ProductApiController extends Controller
      */
     public function show($id)
     {
-        return product::findOrFail($id);
+        return product::findOrFail($id)->load(["brand"]);
     }
 
     /**

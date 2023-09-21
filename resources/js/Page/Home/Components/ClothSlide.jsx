@@ -10,7 +10,7 @@ const ClothSlide = () => {
           	<div className='lg:w-[30rem] md:w-[25rem] w-[20rem]  lg:me-12 md:me-0  text-center text-lg text-skin-sixth/90 font-light'>
 	          	<h3>Elevate your style with our exquisite collection of premium quality fabrics, designed to bring elegance and sophistication to your wardrobe.</h3>
 	          	<button className="bg-slate-50 px-4 py-1 hover:bg-slate-800 text-sm text-slate-900 hover:text-slate-50 mt-6">
-	          		<Link to="/products/cloth">Learn More</Link>
+	          		<Link to="/pos/products">Learn More</Link>
 	          	</button>
           	</div>
           </div>

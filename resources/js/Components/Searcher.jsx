@@ -2,26 +2,20 @@ import IconBtn from '../Components/IconBtn'
 import {useState} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
-import {useNavigate, useSearchParams} from 'react-router-dom'
+import useProductQuery from '../Hooks/useProductQuery'
 
 const Searcher = ({isShow,setIsShow}) => {
 
-	const navigate = useNavigate();
-	const [searchParams, setSearchParmas] = useSearchParams();
-
 	const [searchValue, setSearchValue] = useState("");
+	const {frontendUrl,setQuery} = useProductQuery();
 
 	const handleSearch = (e) => {
 		e.preventDefault();
 
-
-		let params = {
-			q : searchValue.toLowerCase(),
-		}
-
-		let query = new URLSearchParams(params);
-
-		navigate(`/pos/products/search?${query}`)
+		setQuery({
+			q : searchValue,
+			p : 1,
+		})
 	}
 
 

@@ -27,7 +27,7 @@ const Nav = ({setIsCartShow}) => {
 		<div className="fixed top-[2rem] left-0 right-0 z-40 text-skin-coffee shadow-lg fixed">
 			<div className="bg-white shadow-lg border-b-4 border-skin-coffee/50 backdrop-blur-sm">
 				
-				<div className="flex justify-between py-3 md:px-10 px-4">
+				<div className="flex justify-between py-2 md:px-10 px-4">
 					<div className="flex gap-4">
 						<div>
 							<button
@@ -40,7 +40,7 @@ const Nav = ({setIsCartShow}) => {
 
 						<div className="brand text-xl uppercase font-bold text-blue-500 flex items-center cursor-pointer">
 							<Link to="/pos">
-								<h4>LaraCamp</h4>
+								<h4 className="font-raleway">LaraCamp</h4>
 							</Link>
 						</div>
 					</div>
@@ -80,7 +80,7 @@ const Nav = ({setIsCartShow}) => {
 
 			<div
 				className={`${isNavShow ? "translate-x-0" : "translate-x-[-100%]"}
-									 md:translate-x-0 md:text-white text-slate-600 md:bg-slate-800/70 bg-slate-100 py-1 px-8 
+									 md:translate-x-0 md:text-white text-slate-600 md:bg-slate-800 bg-slate-100 py-1 px-8 
 									 md:relative md:h-fit fixed top-0 h-[100vh] w-[80%] md:w-full left-0 transition-all duration-2`}
 				>
 				<div className="absolute top-4 right-4 md:hidden">

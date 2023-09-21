@@ -15,13 +15,17 @@ const Brand = () => {
 
 			<div className="flex flex-wrap items-center justify-center gap-4 w-[90%] mt-10 m-auto">
 				{data && data.map(item => (
-					<Link to={`/pos/products/${item.slug}`} key={item.id} >
-						<div className="img md:w-[13rem] md:h-[13rem] w-[5rem] h-[5rem] cursor-pointer">
-							<div className="relative w-full h-full">
-								<div className="absolute w-full h-full top-0 right-0 bg-slate-400/80 z-20 flex items-center justify-center hover:backdrop-blur-sm hover:bg-slate-600/50">
+					<Link to={`/pos/products?b=${item.slug}`} key={item.id} >
+						<div className="img md:w-[10rem] md:h-[10rem] w-[5rem] h-[5rem] cursor-pointer">
+							<div className="relative w-full h-full flex items-center justify-center p-4">
+								<div className="absolute w-full h-full top-0 right-0 z-20 flex items-center justify-center hover:backdrop-blur-sm hover:bg-slate-200/20">
 								</div>
-								<img src="https://static.vecteezy.com/system/resources/previews/022/101/039/original/gucci-logo-transparent-free-png.png" alt="" />
+								<img 
+									src={item.photo} 
+									alt=""
+								/>
 							</div>
+
 							
 						</div>
 					</Link>

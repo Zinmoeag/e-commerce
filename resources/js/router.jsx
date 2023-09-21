@@ -1,7 +1,7 @@
 import {createBrowserRouter} from "react-router-dom"
-import Welcome from './Page/Welcome'
-import Home from './Page/Home'
-import Product from './Page/Product/index.jsx'
+import Home from './Page/Home/index'
+import Product from './Page/Product/index'
+import ProductShow from './Page/Product/Show'
 import NotFound from './Page/Error/NotFound'
 import AppLayout from './Layouts/AppLayout'
 import Register from './Page/Auth/Register'
@@ -24,8 +24,12 @@ const router = createBrowserRouter([
 				element:<Home />,
 			},
 			{
-				path:"pos/products/:type",
+				path:"pos/products",
 				element:<Product />,
+			},
+			{
+				path:"pos/products/:code",
+				element:<ProductShow />,
 			},
 			{
 				path:"guest/register",

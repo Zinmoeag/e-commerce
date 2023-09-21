@@ -24,6 +24,9 @@ module.exports = {
       },
        width: {
         'showContainer': 'var(--showContainerSize)',
+      },
+      fontFamily : {
+        'bebas' : 'var(--bebas)'
       }
     },
   },

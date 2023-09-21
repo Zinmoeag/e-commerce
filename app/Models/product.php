@@ -17,16 +17,20 @@ class Product extends Model
             });
         });
 
-        $query = $query->when($filter['category'] ?? false, function($query, $slug) {
-            $query->whereHas('category', function($query) use($slug) {
-                $query->where('slug', $slug);
-            });
+        $query = $query->when($filter['category']??false, function($query, $slug) {
+            if(!($slug === 'all')){
+                $query->whereHas('category', function($query) use($slug) {
+                    $query->where('slug', $slug);
+                });
+            }
         });
 
         $query = $query->when($filter['brand']??false, function($query, $slug) {
-            $query->whereHas('brand', function($query) use($slug) {
-                $query->where('slug', $slug);
-            });
+            if(!($slug === 'all')){
+                $query->whereHas('brand', function($query) use($slug) {
+                    $query->where('slug', $slug);
+                });
+            }
         });
 
     }
