@@ -49,20 +49,27 @@ class CategoryApiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($slug)
     {
-        return category::findOrFail($id);
+        $category =  category::where('slug', $slug)->first();
+
+        if (!$category) {
+            return response()->json(['message' => 'brand not found'], 404);
+        }
+    
+        // Return the category as a JSON response
+        return response()->json($category);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update($id)
+    public function update($slug)
     {
-        $product = category::findOrFail($id);
+        $category =  category::where('slug', $slug)->first();
         $rules = [
-            'name' => ['required', 'max:255', Rule::unique('brands', 'name')->ignore($id)],
-            'slug' => ['required', 'max:255', Rule::unique('brands', 'slug')->ignore($id)]
+            'name' => ['required', 'max:255', Rule::unique('brands', 'name')->ignore($slug)],
+            'slug' => ['required', 'max:255', Rule::unique('brands', 'slug')->ignore($slug)]
         ];
 
         $validator = Validator::make(request()->all(), $rules);
@@ -74,7 +81,7 @@ class CategoryApiController extends Controller
                 'name' => request()->name,
                 'slug' => request()->slug,
             ];
-            $result = $product->update($formData);
+            $result = $category->update($formData);
             if ($result) {
                 return ['Result' => 'Brand has been updated'];
             } else {
@@ -86,9 +93,9 @@ class CategoryApiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $slug)
     {
-        $result = category::findOrFail($id)->delete();
+        $result = category::where('slug', $slug)->first()->delete();
 
         if($result){
             return ['Result' => 'Item has been deleted'];

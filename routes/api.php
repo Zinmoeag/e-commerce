@@ -20,13 +20,11 @@ use GuzzleHttp\Handler\Proxy;
 */
 //Get Api for products
 
-Route::apiResource('/products', ProductApiController::class);
-Route::apiResource('/brand', BrandApiController::class);
-Route::apiResource('/categories', CategoryApiController::class);
+Route::apiResource('/products', ProductApiController::class)->parameters('products', 'product_code');
+// 
+Route::apiResource('/categories', CategoryApiController::class)->parameters('categories', 'slug');
 
-//Another Way
-// Route::get('/products/search/{name}', [ProductApiController::class, 'search']);
-// Route::get('/products/{name}', [ProductApiController::class, 'dropdown']);
+Route::apiResource('/brands', BrandApiController::class)->parameters('brands', 'slug');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

@@ -51,20 +51,27 @@ class BrandApiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($slug)
     {
-        return brand::findOrFail($id);
+        $brand =  brand::where('slug', $slug)->first();
+
+        if (!$brand) {
+            return response()->json(['message' => 'brand not found'], 404);
+        }
+    
+        // Return the brand as a JSON response
+        return response()->json($brand);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update($id)
+    public function update($slug)
     {
-        $brand = brand::findOrFail($id);
+        $brand =  brand::where('slug', $slug)->first();
         $rules = [
-            'name' => ['required', 'max:255', Rule::unique('brands', 'name')->ignore($id)],
-            'slug' => ['required', 'max:255', Rule::unique('brands', 'slug')->ignore($id)]
+            'name' => ['required', 'max:255', Rule::unique('brands', 'name')->ignore($slug)],
+            'slug' => ['required', 'max:255', Rule::unique('brands', 'slug')->ignore($slug)]
         ];
 
         $validator = Validator::make(request()->all(), $rules);
@@ -89,9 +96,9 @@ class BrandApiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $slug)
     {
-        $result = brand::findOrFail($id)->delete();
+        $result = brand::where('slug', $slug)->first()->delete();
 
         if($result){
             return ['Result' => 'Item has been deleted'];

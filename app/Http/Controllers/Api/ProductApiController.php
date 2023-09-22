@@ -18,7 +18,8 @@ class ProductApiController extends Controller
     {
         return  Product::latest()
                         ->filter(request(['search', 'category', 'brand']))
-                        ->paginate(6);
+                        ->paginate(6)
+                        ->withQueryString();
 
     }
     /**
@@ -65,20 +66,27 @@ class ProductApiController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($productCode)
     {
-        return product::findOrFail($id)->load(["brand"]);
+        $product =  product::where('product_code', $productCode)->first();
+
+        if (!$product) {
+            return response()->json(['message' => 'brand not found'], 404);
+        }
+    
+        // Return the product as a JSON response
+        return response()->json($product);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update($id)
+    public function update($productCode)
     {
-        $product = product::findOrFail($id);
+        $product =  product::where('product_code', $productCode)->first();
         $rules = [
-            'name' => ['required', 'max:255', Rule::unique('products', 'name')->ignore($product->id)],
-            'product_code' => ['required', 'numeric', Rule::unique('products', 'product_code')->ignore($product->id)],
+            'name' => ['required', 'max:255', Rule::unique('products', 'name')->ignore($product->product_code)],
+            'product_code' => ['required', 'numeric', Rule::unique('products', 'product_code')->ignore($product->product_code)],
             'category_id' => ['required', Rule::exists('categories', 'id')],
             'brand_id' => ['required', Rule::exists('brands', 'id')],
             'description' => ['required'],
@@ -91,18 +99,9 @@ class ProductApiController extends Controller
         if ($validator->fails()) {
             return $validator->errors();
         } else {
-            // if (request()->hasFile('image')) {
-            //     $image = request()->image;
-            //     $fileName = date('Y') . $image->getClientOriginalName();
-            //     request()->image->storeAs('image', $fileName, 'public');
-            //     $product['image'] = $fileName;
-            // }
             if (request()->hasFile('image')) {
                 $image = request()->image;
                 $fileName = date('Y') . $image->getClientOriginalName();
-        
-            //Get the path to the folder where the image is stored 
-            //and then save the path in database
                 $path = request()->image->storeAs('image', $fileName, 'images');
                 $product['image'] = $path;
             }
@@ -120,9 +119,10 @@ class ProductApiController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $productCode)
     {
-        $result = product::findOrFail($id)->delete();
+        // $product =  product::where('product_code', $productCode)->first();
+        $result = product::where('product_code', $productCode)->first()->delete();
 
         if($result){
             return ['Result' => 'Item has been deleted'];
