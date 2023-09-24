@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faUser, faBars, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faBagShopping, faUser, faBars, faMagnifyingGlass, faXmark } from '@fortawesome/free-solid-svg-icons';
 import {useState} from 'react'
 import {Link} from 'react-router-dom'
 import LinkDropDown from '../Components/LinkDropDown'
@@ -7,6 +7,7 @@ import Input from '../Components/Input';
 import AuthContainer from '../Components/AuthContainer';
 import IconBtn from '../Components/IconBtn'
 import Searcher from '../Components/Searcher'
+import {useSelector} from 'react-redux'
 
 
 
@@ -19,9 +20,12 @@ const dropdownMenu = [
 
 const Nav = ({setIsCartShow}) => {
 
+	const {cartItems, totalQuantity} = useSelector(state => state.cart)
+
 	const [isMobileSearchBarShow, setIsMobileSearchBarShow] = useState(false);
 
 	const [isNavShow, setIsNavShow] = useState(false)
+
 
 	return (
 		<div className="fixed top-[2rem] left-0 right-0 z-40 text-skin-coffee shadow-lg fixed">
@@ -66,11 +70,20 @@ const Nav = ({setIsCartShow}) => {
 							 />
 						</div>
 
+						<div className="text-slate-800 text-2xl">
+							<div className="relative">
+								 <IconBtn
+									icon={faBagShopping}
+									onClick={() => {setIsCartShow(true)}}
+								 />
 
-						 <IconBtn
-							icon={faCartShopping}
-							onClick={() => {setIsCartShow(true)}}
-						 />
+								 {totalQuantity > 0 && (
+									 <div className="absolute top-4 left-[-0.5rem] bg-red-600 w-5 h-5 rounded-full text-center text-sm text-white flex items-center justify-center">
+									 	<p>{cartItems.length}</p>
+									 </div>
+								 )} 
+							</div>
+						</div>
 					</div>
 
 				</div>

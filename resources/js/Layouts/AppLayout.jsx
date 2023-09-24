@@ -1,7 +1,9 @@
 import {Outlet} from 'react-router-dom'
 import Nav from '../Components/Nav'
-import Cart from '../Page/Cart'
+import Cart from '../Page/Cart/index'
 import {useState, useEffect} from "react"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AppLayout = () => {
 
@@ -23,6 +25,7 @@ const AppLayout = () => {
 					setIsShow = {setIsCartShow}
 				/>
 
+				<ToastContainer />
 			</section>
 		</>
 	)
