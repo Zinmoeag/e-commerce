@@ -68,7 +68,7 @@ class ProductApiController extends Controller
      */
     public function show($productCode)
     {
-        $product =  product::where('product_code', $productCode)->first();
+        $product =  product::where('product_code', $productCode)->first()->load(['brand']);
 
         if (!$product) {
             return response()->json(['message' => 'brand not found'], 404);

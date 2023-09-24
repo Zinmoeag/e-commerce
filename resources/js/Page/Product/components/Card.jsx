@@ -23,7 +23,7 @@ const Card = ({cardData}) => {
 								<button 
 									className="bg-white border-2 border-slate-600 px-10 py-1 hover:bg-slate-900 hover:text-white"
 								>
-									<Link to={`/pos/products/prodxts_${cardData.id}`}>
+									<Link to={`/pos/products/prodxts_${cardData.product_code}`}>
 										View Item
 									</Link>
 								</button>

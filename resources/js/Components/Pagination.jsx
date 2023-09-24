@@ -6,12 +6,10 @@ const ControllerBtn = ({text, currentPage, forControll , controllerClick}) => {
 	const handleController = (e) => {
 		const controll = Number(e.currentTarget.getAttribute("data_for"));
 
-
 		if(!(controll === currentPage)){
 			controllerClick(controll)
 		}
 	}
-
 
 	let controllText = ""
 	switch(text){

@@ -12,7 +12,7 @@
                 <a href="/guest/login" class="hover:text-skin-coffee">
                     Login
                 </a>
-                <span>/</span>
+                <span>|</span>
                 <a href="/guest/register" class="hover:text-skin-coffee">
                     Register
                 </a>

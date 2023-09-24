@@ -40,7 +40,7 @@ export default () => {
 
       <SwiperSlide>
         <div className="lg:col-span-3 md:col-span-4 h-full w-full">
-            <Link to="/products/shoes">
+            <Link to="/pos/products?c=shoes">
               <div className="bg-skin-third w-full h-full overflow-hidden relative">
                   <img src={shoe} className="object-cover object-center w-full h-full hover:scale-110 cursor-pointer transition-all duration-200" alt="" />
               </div>

@@ -2,11 +2,14 @@ import useFetcher from '../../Hooks/useFetcher'
 import {productShowApi} from '../../Api/apiUrl'
 import {useParams} from 'react-router-dom'
 import {useState, useMemo} from 'react'
+import {useDispatch} from 'react-redux'
+import {addToCart} from '../../Redux/index'
 
 
 const ProductShow = () => {
 
 	const {code} = useParams();
+	const dispatch = useDispatch();
 
 	const url = useMemo(() => {
 		return productShowApi(code.split("_")[1])
@@ -19,6 +22,29 @@ const ProductShow = () => {
 	const totalPrice = quantity * pricePerOneItem;
 
 
+	const handleAddtoCart = (e) => {
+		e.preventDefault();
+
+		//add 1 if user didnt selected quantity
+		if(quantity === 0){
+			setQuantity(prev => prev + 1)
+		}
+
+		const selectedProduct = {
+			id: data.id,
+			product_code : data.product_code,
+			name : data.name,
+			brand : data.brand.name,
+			pricePerOneItem : data.price,
+			quantity : quantity === 0 ? 1 : quantity,
+			totalPrice : quantity * pricePerOneItem,
+		}
+
+
+		dispatch(addToCart(selectedProduct))
+	}
+
+	// console.log(Object.keys(data).length > 0)
 
 
 	return (
@@ -69,7 +95,7 @@ const ProductShow = () => {
 
 								<div className="lg:w-[25rem] sm:w-[20rem] my-8">
 
-									<form>
+									<form onSubmit={handleAddtoCart}>
 										<div className="w-full my-4">
 											<h3 className="text-xl text-slate-900">Add To Cart</h3>
 											<p className="text-slate-900">Quantity</p>
