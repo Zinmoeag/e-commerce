@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BrandApiController;
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\ProductApiController;
+use App\Http\Controllers\OrderApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserProfileApiController;
@@ -21,11 +22,12 @@ use GuzzleHttp\Handler\Proxy;
 //Get Api for products
 
 Route::apiResource('/products', ProductApiController::class)->parameters('products', 'product_code');
-// 
+//
 Route::apiResource('/categories', CategoryApiController::class)->parameters('categories', 'slug');
 
 Route::apiResource('/brands', BrandApiController::class)->parameters('brands', 'slug');
 
+Route::apiResource('/orders',OrderApiController::class);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
