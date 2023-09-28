@@ -45,8 +45,7 @@ class Product extends Model
         return $this->belongsTo(brand::class);
     }
 
-    public function order()
-    {
-        return $this->belongsTo(order::class);
+    public function orders(){
+        return $this->belongsToMany(Order::class)->withPivot('quantity');
     }
 }

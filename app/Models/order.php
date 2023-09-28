@@ -9,13 +9,14 @@ class Order extends Model
 {
     use HasFactory;
 
-    public function user()
+    public function products()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Product::class)->withPivot('quantity');
     }
 
-    public function product()
+    public function users()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(User::class)->withPivot('quantity');
     }
+
 }

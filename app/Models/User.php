@@ -40,10 +40,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function order()
+    public function orders()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Order::class)->withPivot('quantity');
     }
+
 
 
     // ACCESSOR
