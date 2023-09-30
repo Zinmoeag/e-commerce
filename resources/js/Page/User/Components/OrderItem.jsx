@@ -1,4 +1,4 @@
-const OrderItem = ({id,date,paymentStatus,total}) => {
+const OrderItem = ({id,date,fullfill,total}) => {
 	return (
 		<>
 			 <tr>
@@ -9,7 +9,7 @@ const OrderItem = ({id,date,paymentStatus,total}) => {
 	                {date}
 	              </td>
 	             <td className="px-2 py-4 whitespace-no-wrap">
-	                {paymentStatus}
+	                {fullfill}
 	              </td>
 	              <td className="px-2 py-4 whitespace-no-wrap">
 	                {total}

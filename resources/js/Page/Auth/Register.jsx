@@ -1,8 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams} from "react-router-dom";
 import { useEffect, useState } from "react";
 import Input from "../../Components/Input";
 import { useForm } from "react-hook-form";
 import useAuth from "../../Hooks/useAuth";
+import withGuest from '../../Utilities/withGuest'
 
 const Register = () => {
     const {
@@ -11,11 +12,13 @@ const Register = () => {
         watch,
         formState: { errors },
     } = useForm();
-    const navigate = useNavigate();
+
     const [error, setError] = useState({});
     const [status, setStatus] = useState(null);
+    const [searchParams] = useSearchParams();
+    const next = searchParams.get("next")
 
-    const { signUp, getUser } = useAuth({
+    const { signUp, getUser, authStatus } = useAuth({
         url: "/api/register",
     });
 
@@ -27,15 +30,14 @@ const Register = () => {
         });
     };
 
-    if (status === 200) {
-        navigate(0);
-    }
-
     return (
         <div>
             <div className="Register text-sm pt-10 h-[100vh] flex items-center px-10 text-slate-600">
                 <div className="w-[25rem] md:w-[30rem] text-sm px-4 py-2">
                     <div className="mb-4">
+                        {next && (
+                            <p className="text-slate-600 text-sm text-center py-1 rounded-md mb-4 text-lg bg-green-400">After Login, You will be Redirect to target Page</p>
+                        )}
                         <h3 className="text-2xl font-bold uppercase mb mb-1">
                             Create A New Account
                         </h3>
@@ -141,4 +143,4 @@ const Register = () => {
     );
 };
 
-export default Register;
+export default withGuest(Register);

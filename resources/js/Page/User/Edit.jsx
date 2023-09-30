@@ -27,10 +27,15 @@ const Edit = ({authUser, authStatus}) => {
 	// console.log(authUser)
 
 	useEffect(() => {
+
+
 		if(authStatus === 200){
+			let {city, country, address} = authUser?.address ? JSON.parse(authUser?.address) : {};
 			setValue('username', authUser?.name)
 			setValue('phone',authUser?.phone)
-			setValue('address',authUser?.address)
+			setValue('address',address || "")
+			setValue('city',city || "")
+			setValue('country',country || "")
 		}
 	},[authStatus,setValue])
 
@@ -43,8 +48,15 @@ const Edit = ({authUser, authStatus}) => {
     const navigate = useNavigate()
 
     const onSubmit = (cleanData) => {
+
+    	const data = {
+    		username : cleanData.username,
+    		phone : cleanData.phone,
+    		address : JSON.stringify({city:cleanData.city, country:cleanData.country, address:cleanData.address})
+    	}
+
     	updateUserInfo({
-    		data:cleanData,
+    		data:data,
     		setError:setReturnedError,
     		setStatus,
     		setLoading
@@ -101,14 +113,39 @@ const Edit = ({authUser, authStatus}) => {
 			                    error={errors.phone ? errors.phone.message : returnedError ? returnedError.phone : null}
 			                />
 
-                            <Textarea
-                           		{...register('address', {
-                           			required : "This field shouldn't be empty"
-                           		})}
-                            	label="Enter Your Address"
-                            	placeholder="Address"
-                            	error={errors.address ? errors.address.message : returnedError ? returnedError.address : null}
-                            />
+
+			                <h3 className="text-xl text-slate-800 mt-8 mb-2">Address</h3>
+
+
+			                <Input
+			                    {...register("city", {
+			                        required: "This filled Must be filled",
+			                    })}
+			                    label="City"
+			                    type="text"
+			                    placeholder="city"
+			                    error={errors.city ? errors.city.message : returnedError ? returnedError.city : null}
+			                />
+
+			                <Input
+			                    {...register("country", {
+			                        required: "This filled Must be filled",
+			                    })}
+			                    label="Country/region"
+			                    type="text"
+			                    placeholder="country"
+			                    error={errors.country ? errors.country.message : returnedError ? returnedError.country : null}
+			                />
+
+			                <Textarea 
+			                	{...register('address', {
+			                		required : "This filled Must be filled",
+			                	})}
+			                	label="address"
+			                    type="text"
+			                    placeholder="address"
+			                    error={errors.address ? errors.address.message : returnedError ? returnedError.address : null}
+			                />
 
 			                <button
 			                	className="bg-white hover:bg-slate-400  border-2 border-slate-400 text-center w-full text-slate-800 mt-6 py-1 rounded-lg"

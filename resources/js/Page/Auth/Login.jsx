@@ -1,8 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import Input from "../../Components/Input";
 import { useForm } from "react-hook-form";
 import {useEffect, useState} from 'react';
 import useAuth from '../../Hooks/useAuth'
+import withGuest from '../../Utilities/withGuest'
 
 const Login = () => {
     const {
@@ -11,15 +12,17 @@ const Login = () => {
         watch,
         formState: { errors },
     } = useForm();
+
     const navigate = useNavigate();
     const [error,setError] = useState({});
     const [status, setStatus] = useState(null);
+    const [searchParams] = useSearchParams();
+    const next = searchParams.get("next")
 
-    const {login} = useAuth({
+
+    const {login,authStatus} = useAuth({
         url:'/api/login'
     });
-
-    console.log(error)
 
     const onSubmit = (cleanData) => {
         login({
@@ -29,18 +32,15 @@ const Login = () => {
         })
     };
 
-
-    if(status === 200){
-        navigate(0)
-    }
-
-
-
     return (
         <div>
-            <div className="login text-sm pt-10 h-[100vh] flex items-center px-10 text-slate-600">
+            <div className="login text-sm pt-10 flex items-center px-10 text-slate-600">
                 <div className="w-[25rem] md:w-[30rem] text-sm px-4 py-2">
                     <div className="mb-4">
+
+                        {next && (
+                            <p className="text-slate-600 text-sm text-center py-1 rounded-md mb-4 text-lg bg-green-400">After Login, You will be redirected to target Page</p>
+                        )}
                         <h3 className="text-2xl font-bold uppercase mb mb-1">
                             Login
                         </h3>
@@ -82,10 +82,19 @@ const Login = () => {
                             />
 
                             {error.message && <p className="text-red-600">{error.message}</p>}
-                            
-                            <a href="/guest/forgot-password">
+
+                            {next ? (
+                                <Link to={`/guest/register?next=${next}`} className="text-blue-600">
+                                    Create An Account ?
+                                </Link>
+                            ) : (
+                                <Link to="/guest/register" className="text-blue-600">
+                                    Create An Account ?
+                                </Link>
+                            )}
+                            <Link to="/guest/forgot-password" className="text-red-600">
                                 Forgot Password?
-                            </a>
+                            </Link>
 
 
                             <button
@@ -102,4 +111,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default withGuest(Login);

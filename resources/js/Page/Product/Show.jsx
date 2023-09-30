@@ -37,7 +37,7 @@ const ProductShow = () => {
 			brand : data.brand.name,
 			pricePerOneItem : data.price,
 			quantity : quantity === 0 ? 1 : quantity,
-			totalPrice : quantity * pricePerOneItem,
+			totalPrice : (quantity === 0 ? 1 : quantity) * pricePerOneItem,
 		}
 
 
