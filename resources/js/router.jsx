@@ -11,6 +11,10 @@ import Profile from './Page/User/Profile'
 import Edit from './Page/User/Edit'
 import ChangePassword from './Page/User/ChangePassword'
 import ChangeEmail from './Page/User/ChangeEmail'
+import MainCartPage from './Page/Cart/mainCartPage'
+import Order from './Page/Order/Index.jsx'
+import Confirmation from './Page/Order/Confirmation.jsx'
+
 
 
 const router = createBrowserRouter([
@@ -32,12 +36,25 @@ const router = createBrowserRouter([
 				element:<ProductShow />,
 			},
 			{
+				path:"pos/cart",
+				element : <MainCartPage />,
+			},
+			{
 				path:"guest/register",
 				element : <Register />,
 			},
+
 			{
 				path:"user/profile",
 				element : <Profile />,
+			},
+			{
+				path:"user/order",
+				element : <Order />,
+			},
+			{
+				path:"user/order/confirmation/:id",
+				element : <Confirmation />,
 			},
 			{
 				path:"user/edit",

@@ -15,9 +15,7 @@ const link = [
 ]
 
 const UserInfo = ({user}) => {
-
-	const displayText = UserDisplayText(user.name);
-
+const displayText = UserDisplayText(user.name);
 
 	return (
 		<>
@@ -69,7 +67,7 @@ const UserInfo = ({user}) => {
 									className="text-red-500 pe-4"
 								/>
 								<span className="text-justify">
-									{user.address}
+									{Object.values(JSON.parse(user.address)).join(", ")}
 								</span>
 							</p>	
 						)
