@@ -17,11 +17,11 @@ class OrderApiController extends Controller
     }
 
     public function confirmation(Order $order)
-    {   
+    {
         //check if user requested order is his own order or not
         if(Gate::allows('checkConfirmation', $order)){
             return response()->json([
-                "order" => $order->load(["products"]), 
+                "order" => $order->load(["products"]),
             ],200);
         }else{
             return response([
@@ -68,7 +68,7 @@ class OrderApiController extends Controller
         foreach ($request->input('products') as $product) {
             $order->products()
                 ->attach($product['product_id'],[
-                    "user_id" => $userId, 
+                    "user_id" => $userId,
                     "quantity" => $product["quantity"],
                 ]);
         }
@@ -91,7 +91,6 @@ class OrderApiController extends Controller
             'order_date' => ['required', 'date'],
             'phone' => ['required', 'string'],
             'address' => ['required', 'string'],
-            'total_price' => ['required', 'numeric'],
             'products.*.product_id' => ['required', 'exists:products,id'], // Validate product IDs
             'products.*.quantity' => ['required', 'integer', 'min:1'], // Validate quantities
         ]);
@@ -118,10 +117,10 @@ class OrderApiController extends Controller
             'total_price' => $totalPrice,
         ]);
 
-        foreach ($request->input('products') as $product) {
+        foreach (request()->input('products') as $product) {
             $order->products()
                 ->attach($product['product_id'],[
-                    "user_id" => $userId, 
+                    "user_id" => $id,
                     "quantity" => 1
                 ]);
         }

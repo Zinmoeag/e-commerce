@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\BrandApiController;
+use App\Http\Controllers\Api\CartApiController;
 use App\Http\Controllers\Api\CategoryApiController;
 use App\Http\Controllers\Api\ProductApiController;
 use App\Http\Controllers\OrderApiController;
@@ -59,3 +60,15 @@ Route::middleware(['auth:sanctum','auth:web'])->post('/logout', [UserProfileApiC
 
 Route::post('/register',[UserProfileApiController::class, 'RegisterStore']);
 Route::post('/login',[UserProfileApiController::class, 'UserLogin']);
+
+
+// For Cart Api
+Route::controller(CartApiController::class)->group(function(){
+    Route::get('/show/cart','showCart');
+    Route::post('/store/cart','storeCart');
+    Route::post('/reset/cart','resetCart');
+    Route::match(['get','post'],'/add/item/{productId}','addItem');
+    Route::match(['get','post'],'/remove/item/{productId}','removeItem');
+    Route::match(['get','post'],'/increment/qty/{productId}','incrementQty');
+    Route::match(['get','post'],'/decrement/qty/{productId}','decrementQty');
+});
