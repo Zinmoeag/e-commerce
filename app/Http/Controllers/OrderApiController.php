@@ -21,7 +21,6 @@ class OrderApiController extends Controller
             'order_date' => ['required', 'date'],
             'phone' => ['required', 'string'],
             'address' => ['required', 'string'],
-            'total_price' => ['required', 'numeric'],
             'products.*.product_id' => ['required', 'exists:products,id'],
             'products.*.quantity' => ['required', 'integer', 'min:1'],
         ]);
@@ -40,7 +39,7 @@ class OrderApiController extends Controller
 
         // Create the order
         $order = Order::create([
-            'order_date' => $request->input('order_date'),
+            'order_date' => now(),
             'phone' => $request->input('phone'),
             'address' => $request->input('address'),
             'total_price' => $totalPrice,
@@ -49,7 +48,7 @@ class OrderApiController extends Controller
         // Attach products and quantities
         $order->products()->attach($request->input('products'));
 
-        return response()->json(['message' => 'Order Successfully Created'], 201);
+        return response()->json(['message' => 'Order Successfully'], 201);
     }
 
     public function update($id)
@@ -64,7 +63,6 @@ class OrderApiController extends Controller
             'order_date' => ['required', 'date'],
             'phone' => ['required', 'string'],
             'address' => ['required', 'string'],
-            'total_price' => ['required', 'numeric'],
             'products.*.product_id' => ['required', 'exists:products,id'], // Validate product IDs
             'products.*.quantity' => ['required', 'integer', 'min:1'], // Validate quantities
         ]);
