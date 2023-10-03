@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('phone');
             $table->string('address');
             $table->integer('total_price');
+            $table->string("payment");
+            $table->boolean('fullfill')->default(false);
             $table->timestamps();
         });
     }

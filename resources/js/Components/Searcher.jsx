@@ -43,7 +43,7 @@ const Searcher = ({isShow,setIsShow}) => {
 					</div>
 
 
-					<div className="md:hidden bg-red-500 h-[2.5rem] w-[1.5rem] gap-4 flex items-center justify-center text-white">
+					<div className="md:hidden text-slate-600 h-[2.5rem] w-[1.5rem] gap-4 flex items-center justify-center">
 						<IconBtn
 							icon={faXmark}
 							onClick={() => {setIsShow(false)}}

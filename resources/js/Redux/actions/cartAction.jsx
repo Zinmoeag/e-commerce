@@ -3,6 +3,7 @@ import {
 	REMOVE_CART_ITEM,
 	INCRESEQUANTITY,
 	DECREASEQUANTITY,
+	RESET_ITEMS
 } from '../type'
 
 export const addToCart = (payload) =>{
@@ -29,6 +30,13 @@ export const increseQuantity = (payload) => {
 export const decreaseQuantity = (payload) => {
 	return {
 		type : DECREASEQUANTITY,
+		payload : payload
+	}
+}
+
+export const resetItems = (payload) => {
+	return {
+		type : RESET_ITEMS,
 		payload : payload
 	}
 }

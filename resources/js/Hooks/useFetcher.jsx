@@ -22,9 +22,11 @@ export default function useFetcher(uri){
 		 	setData(res.data);
 		 })
 		 .catch(err => {
-		 	setData([]);
+		 	setData(null);
 		 	setLoading(false)
 		 	setError(err.response ? err.response.status : 500)
+
+		 	console.log(err)
 		 })
 	}
 

@@ -26,17 +26,19 @@ Route::apiResource('/products', ProductApiController::class)->parameters('produc
 //
 Route::apiResource('/categories', CategoryApiController::class)->parameters('categories', 'slug');
 
-Route::apiResource('/brands', BrandApiController::class)->parameters('brands', 'slug');
+Route::apiResource('/brand', BrandApiController::class)->parameters('brands', 'slug');
 
-Route::apiResource('/orders',OrderApiController::class);
+Route::apiResource('/orders',OrderApiController::class)->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::get("/orders/confirmation/{order}", [OrderApiController::class, 'confirmation']);
+
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
 
 // For UserProfileApiController
-Route::controller(UserProfileApiController::class)->middleware('auth:sanctum')->group(function () {
+Route::controller(UserProfileApiController::class)->middleware(['auth:sanctum'])->group(function () {
     // For User Edit Profile
     Route::get('user/profile/edit', 'UserProfileEdit');
     Route::match(['get', 'post'], 'user/profile/store', 'UserProfileStore');
@@ -53,7 +55,7 @@ Route::controller(UserProfileApiController::class)->middleware('auth:sanctum')->
     // Route::match(['get','post'],'/logout','UserLogout');
 });
 
-Route::middleware('auth:sanctum','auth:web')->post('/logout', [UserProfileApiController::class, 'UserLogout']);
+Route::middleware(['auth:sanctum','auth:web'])->post('/logout', [UserProfileApiController::class, 'UserLogout']);
 
 
 Route::post('/register',[UserProfileApiController::class, 'RegisterStore']);

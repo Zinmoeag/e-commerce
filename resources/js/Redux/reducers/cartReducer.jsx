@@ -4,6 +4,7 @@ import {
 	REMOVE_CART_ITEM,
 	INCRESEQUANTITY,
 	DECREASEQUANTITY,
+	RESET_ITEMS
 } from '../type'
 
 const initialState = localStorage.getItem('cart') ? JSON.parse( localStorage.getItem('cart')) : {
@@ -167,6 +168,18 @@ export const cartReducer = (state = initialState, action) => {
 				return removedCartState;
 
 			}
+
+		case 'RESET_ITEMS' : 
+
+			const resetedCart = {
+				cartItems : [],
+				totalAmount : 0,
+				totalQuantity : 0,
+			}
+
+			storInLocalStorage(resetedCart);
+			return resetedCart;
+
 
 		default : return state
 	}

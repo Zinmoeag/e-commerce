@@ -15,7 +15,7 @@ const Input = React.forwardRef(({name,label,type,value,placeholder,error, onChan
 
 				onChange={onChange} 
 				onBlur={onBlur}
-				className="border-b-2 py-1 px-2 border-skin-coffee bg-skin-transparent w-full mt-2 outline-none"
+				className="border-[0.05rem] border-slate-400  rounded-lg py-2 px-2 border-skin-coffee bg-skin-transparent w-full mt-2 outline-none"
 				placeholder={placeholder}
 				type={type}
 			/>

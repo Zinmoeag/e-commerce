@@ -17,8 +17,8 @@
         <div>
             <div id="pos">
                 <!-- navbar -->
-                    @section('navbar')
-                    @include('pos.layouts.navbar')
+<!--                     @section('navbar')
+                    @include('pos.layouts.navbar') -->
                     @show
                 <!-- end navbar -->
 

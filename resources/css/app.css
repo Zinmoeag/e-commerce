@@ -32,7 +32,7 @@ font-family: 'Lobster', cursive;*/
 @layer base {
   :root{
     --main: 22 22 22;
-    --secondary: 255 150 0;
+    --secondary: 240 89 69;
     --coffee : 122 89 66;
     --third: 152 200 214;
     --fourth: 227 180 186;
@@ -54,12 +54,18 @@ html{
   font-family: 'Quicksand', sans-serif
 }
 
-#sideBarFilter::-webkit-scrollbar-track {
-  background: red;
+html::-webkit-scrollbar {
+  display: none;
 }
 
-#sideBarFilter::-webkit-scrollbar-thumb {
-  border-radius: 5px;
+html::-webkit-scrollbar-track {
+  background: white;
+}
+
+html::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #1b313f;
+    height: 1rem;
 }
 
 .font-bebas {
@@ -73,3 +79,4 @@ html{
 .font-raleway{
   font-family: 'Raleway', sans-serif;
 }
+

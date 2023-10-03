@@ -12,7 +12,7 @@ const Textarea = React.forwardRef(({name,label,placeholder,onChange,onBlur,error
 				onBlur={onBlur}
                 cols="30" 
                 rows="5" 
-                className="w-full px-2 py-2 my-2"
+                className="w-full px-2 py-2 my-2 border-[0.05rem] border-slate-400"
             >
             </textarea>
 

@@ -106,7 +106,19 @@ const Product = () => {
 
 							<div className="w-full grid grid-cols-12">
 
-								{loading && (
+								{items?.length === 0 ? (
+									<div className="col-span-12 p-4 flex items-center justify-center text-red-400 border-t-2 border-slate-200">
+										<p>There is no Items to be Shown</p>
+									</div>
+								) : hasItems ? items.map((item,i) => (
+									<div className="xl:col-span-4 sm:col-span-6 col-span-12 p-4 flex items-center justify-center" key={item.id}>
+										<SlideInAnimation itemNo={i}>
+											<Card
+												cardData={item}
+											/>
+										</SlideInAnimation>
+									</div>
+								)) : (
 									<div className="col-span-12 p-4 flex items-center justify-center h-[10rem]">
 										<img 
 											src="http://localhost:8000/uploads/loading.gif" 
@@ -116,21 +128,7 @@ const Product = () => {
 									</div>
 								)}
 
-								{items?.length === 0 && (
-									<div className="col-span-12 p-4 flex items-center justify-center text-red-400 border-t-2 border-slate-200">
-										<p>There is no Items to be Shown</p>
-									</div>
-								)}
 
-								{hasItems && items.map((item,i) => (
-									<div className="xl:col-span-4 sm:col-span-6 col-span-12 p-4 flex items-center justify-center" key={item.id}>
-										<SlideInAnimation itemNo={i}>
-											<Card
-												cardData={item}
-											/>
-										</SlideInAnimation>
-									</div>
-								))}
 
 							</div>
 

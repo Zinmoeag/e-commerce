@@ -11,7 +11,7 @@ const Profile = ({authUser, authStatus}) => {
 			<>
 				<section className='bg-slate-100 h-[100vh]'>
 					<div className="lg:grid grid-cols-12 flex flex-col lg:w-full md:w-[80%] sm:w-[90%] w-[98%] mx-auto sm:px-6 p-4">
-						<div className=" lg:px-4 lg:col-span-3">
+						<div className="lg:px-4 lg:col-span-3">
 							<UserInfo
 								user={authUser} 
 							/>
@@ -19,7 +19,7 @@ const Profile = ({authUser, authStatus}) => {
 
 						<div className="border-b-2 border-slate-600 mt-6 lg:hidden"></div>
 
-						<div className="w-full lg:col-span-9 mt-10">
+						<div className="w-full lg:col-span-9 mt-10 flex justify-center">
 							<OrderList />
 						</div>
 
