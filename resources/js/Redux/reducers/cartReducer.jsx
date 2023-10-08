@@ -1,20 +1,24 @@
 import { ToastContainer, toast } from 'react-toastify';
+
 import {
+	GET_CART,
 	ADD_TO_CART,
 	REMOVE_CART_ITEM,
 	INCRESEQUANTITY,
 	DECREASEQUANTITY,
-	RESET_ITEMS
+	RESET_ITEMS,
 } from '../type'
 
-const initialState = localStorage.getItem('cart') ? JSON.parse( localStorage.getItem('cart')) : {
+
+const initialState = {
 	cartItems : [],
+	token : localStorage.getItem("cart_token") || null,
 	totalQuantity : 0,
-	totalAmount : 0,
+	totalPrice : 0,
 }
 
 
-const storInLocalStorage = (state) => localStorage.setItem("cart", JSON.stringify(state));
+const storInLocalStorage = (value) => localStorage.setItem("cart_token", value);
 
 
 export const cartReducer = (state = initialState, action) => {
@@ -22,164 +26,86 @@ export const cartReducer = (state = initialState, action) => {
 	const modifiedItems = [ ...state.cartItems ]
 
 	switch (action.type){
+
+		case GET_CART :	
+			const token = action.payload.cart.token
+			storInLocalStorage(token)
+			return {
+				cartItems: action.payload.cartItem,
+				token : token,
+				totalQuantity : action.payload.cart.total_quantity,
+				totalPrice : action.payload.cart.total_price,
+			}
+
 		case ADD_TO_CART :
-			
-			let totalCartQuantity = modifiedItems.reduce((accumulator, currentValue) => accumulator + currentValue.quantity , action.payload.quantity)
-			let totalAmount =  modifiedItems.reduce((accumulator, currentValue) => accumulator + currentValue.totalPrice , action.payload.totalPrice)
-			const itemIndex = state.cartItems.findIndex(item => item.id === action.payload.id)
-
-			//handle if item already exist
+			let cartItems = state.cartItems
+			const itemIndex = cartItems.findIndex(item => item.id === action.payload.product.id)
 			if(itemIndex >= 0){
+				let modifiedCartItems = cartItems.filter(item => item.id !== action.payload.product.id);
 
-				// if item is already is exist add quantity
-				let newQuantity = modifiedItems[itemIndex].quantity += action.payload.quantity
-
-				modifiedItems[itemIndex] = {
-					...modifiedItems[itemIndex],
-					quantity : newQuantity,
-					totalPrice : newQuantity * modifiedItems[itemIndex].pricePerOneItem,
-				}
-
-
-				toast.success(`${action.payload.name}'s quantity is increased`, {
-					position: "bottom-left",
-					autoClose: 5000,
-					hideProgressBar: true,
-					closeOnClick: true,
-					pauseOnHover: true,
-					draggable: true,
-					progress: undefined,
-					theme: "dark",
-				});
-
-				let modifiedState = {
+				return {
 					...state,
-					cartItems : [...modifiedItems],
-					totalQuantity : totalCartQuantity,
-					totalAmount : totalAmount,
+					cartItems : [...modifiedCartItems, action.payload.product],
+					totalQuantity : action.payload.cart.total_quantity,
+					totalPrice : action.payload.cart.total_price,
 				}
-
-				storInLocalStorage(modifiedState);
-				return modifiedState;
+			}else{
+				
+				return {
+					...state,
+					cartItems : [...cartItems, action.payload.product],
+					totalQuantity : action.payload.cart.total_quantity,
+					totalPrice : action.payload.cart.total_price,
+				}
 			}
-
-			//add new cart item
-			modifiedItems.push(action.payload)
-
-			// for nofify user
-			toast.success(`${action.payload.name} is added to cart`, {
-				position: "bottom-left",
-				autoClose: 5000,
-				hideProgressBar: true,
-				closeOnClick: true,
-				pauseOnHover: true,
-				draggable: true,
-				progress: undefined,
-				theme: "dark",
-			});
-
-			let modifiedState = {
-				...state,
-				cartItems : [...modifiedItems],
-				totalQuantity : totalCartQuantity,
-				totalAmount : totalAmount,
-
-			}
-
-			storInLocalStorage(modifiedState);
-			return modifiedState;
-
+			
 		case REMOVE_CART_ITEM :
 			//remove selected item
-			const filteredItem = modifiedItems.filter(item => item.id !== action.payload.id)
-
-			//return state
-			const removedCartState = {
+			const filteredItem = modifiedItems.filter(item => item.id !== action.payload.targetProduct.id)
+			
+			return {
 				...state,
 				cartItems : filteredItem,
-				totalQuantity : filteredItem.reduce((accumulator, currentValue) => accumulator + currentValue.quantity , 0),
-				totalAmount : filteredItem.reduce((accumulator, currentValue) => accumulator + currentValue.totalPrice , 0)
+				totalQuantity : action.payload.cart.total_quantity,
+				totalPrice : action.payload.cart.total_price,
 			}
 
-			storInLocalStorage(removedCartState)
-
-			return removedCartState;
-
 		case INCRESEQUANTITY :
-			const targetItemIndex = state.cartItems.findIndex(item => item.id === action.payload.id)
-			let newQuantity = modifiedItems[targetItemIndex].quantity + 1
+			let newQty = action.payload.product.pivot.quantity;
+			let newPrice = action.payload.product.pivot.total_price;
 
-			if(targetItemIndex >= 0){
-				const modifiedItems = [...state.cartItems];
+			let modifiedCartItems	= state.cartItems;
+			const productIndex = modifiedCartItems.findIndex(item => item.id === action.payload.product.id)
+			let targetCartItems = modifiedCartItems[productIndex];
 
-				modifiedItems[targetItemIndex] = {
-					...modifiedItems[targetItemIndex],
-					quantity : newQuantity,
-					totalPrice : newQuantity * modifiedItems[targetItemIndex].pricePerOneItem,
-				}
+			targetCartItems.pivot.quantity = newQty;
+			targetCartItems.pivot.total_price = newPrice
 
-				const modifiedState = {
-					...state,
-					cartItems : modifiedItems,
-					totalQuantity : state.totalQuantity + 1,
-					totalAmount : state.totalAmount + action.payload.pricePerOneItem,
-				}
-
-				storInLocalStorage(modifiedState)
-				return modifiedState;
+			return {
+				...state,
+				cartItems : [...modifiedCartItems],
+				totalQuantity : action.payload.cart.total_quantity,
+				totalPrice : action.payload.cart.total_price,
 			}
 
 		case DECREASEQUANTITY :
 
-			const decreaseItemIndex = state.cartItems.findIndex(item => item.id === action.payload.id)
+			let removedQty = action.payload.product.pivot.quantity;
+			let removedPrice = action.payload.product.pivot.total_price;
 
-			if(modifiedItems[decreaseItemIndex].quantity > 1){
-				//decrease qty if qty is over 0
-				let newQuantity = modifiedItems[decreaseItemIndex].quantity - 1
+			let removedCartItems = state.cartItems;
+			const removedItemIndex = removedCartItems.findIndex(item => item.id === action.payload.product.id)
+			let targetRemoveItem = removedCartItems[removedItemIndex];
 
-				modifiedItems[decreaseItemIndex] = {
-					...modifiedItems[decreaseItemIndex],
-					quantity : newQuantity,
-					totalPrice : newQuantity * modifiedItems[decreaseItemIndex].pricePerOneItem,
-				}
+			targetRemoveItem.pivot.quantity = removedQty;
+			targetRemoveItem.pivot.total_price = removedPrice
 
-
-				const decreasedState = {
-					...state,
-					cartItems : modifiedItems,
-					totalQuantity : state.totalQuantity - 1,
-					totalAmount : state.totalAmount - action.payload.pricePerOneItem,
-				}
-
-				storInLocalStorage(decreasedState)
-				return decreasedState;
-			}else{
-				//remove item if qty is 0 
-				const filteredItem = state.cartItems.filter(item => item.id !== action.payload.id)
-
-				const removedCartState = {
-					...state,
-					cartItems : filteredItem,
-					totalQuantity : filteredItem.reduce((accumulator, currentValue) => accumulator + currentValue.quantity , 0),
-					totalAmount : filteredItem.reduce((accumulator, currentValue) => accumulator + currentValue.totalPrice , 0),
-				}
-
-				storInLocalStorage(removedCartState)
-				return removedCartState;
-
+			return {
+				...state,
+				cartItems : [...removedCartItems],
+				totalQuantity : action.payload.cart.total_quantity,
+				totalPrice : action.payload.cart.total_price,
 			}
-
-		case 'RESET_ITEMS' : 
-
-			const resetedCart = {
-				cartItems : [],
-				totalAmount : 0,
-				totalQuantity : 0,
-			}
-
-			storInLocalStorage(resetedCart);
-			return resetedCart;
-
 
 		default : return state
 	}

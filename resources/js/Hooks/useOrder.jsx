@@ -1,12 +1,19 @@
-import {orderCreateApi, userOrderApi, deleteOrder} from '../Api/apiUrl'
+import {
+	orderCreateApi, 
+	userOrderApi, 
+	deleteOrder, 
+	createBuyTokenApi, 
+	getBuyingProductApi
+} from '../Api/apiUrl'
 import axiosClient from '../Libs/axios-client'
 import {useSelector, useDispatch} from 'react-redux'
-import {resetItems} from '../Redux/index'
+import {resetingCart} from '../Redux/index'
+import useBuy from '../Hooks/useBuy'
 
 const useOrder = () => {
 	const {cartItems, totalAmount, totalQuantity} = useSelector(state => state.cart)
 	const dispatch = useDispatch();
-
+	const {resetingBuyCart} = useBuy();
 
 	const getOrder = ({setOrder}) => {
 		const url = userOrderApi();
@@ -16,56 +23,33 @@ const useOrder = () => {
 				const filteredDupOrderArr = res.data.orders.filter((version,i,arr) => arr.findIndex(version2=>(version2.id===version.id)) === i);
 				setOrder(filteredDupOrderArr)
 			})
-			.catch(err =>{})
 	}
 
-	const createOrder = ({info,setStatus,setError, setOrderId}) => {
+	const createOrder = ({ info, type, cart_token, setStatus,setError, setOrderId}) => {
 		const url = orderCreateApi()
 
-		const products = cartItems.map(item => ({
-			product_id : item.id,
-			quantity : item.quantity,
-			price : item.pricePerOneItem,
-		}))
-		
 		const data = {
 			...info,
-			products : products
+			cart_token : cart_token,
 		}
 
 		axios.post(url,data)
 			.then(res => {
 				setStatus(res.status)
 				setOrderId(res.data.order_id)
-				dispatch(resetItems())
+
+				if(res.status === 201 && type === "cart"){
+					dispatch(resetingCart(cart_token))
+				}else if(res.status === 201 && type === 'buy'){
+					resetingBuyCart(cart_token);
+				}
+
 			})
 			.catch(err => {
 				if(err.response.status === 422){
-					//modified returned errors
-					let error = {
-						...err.response.data.message,
-					}
-
-					let arr = Object.keys(error)
-					error["products"] = {}
-					arr.forEach((err,i) => {
-						if(err.includes("products")){
-							const errroMsg =  error[err];
-
-							//remove existed error message
-							delete error[err]
-
-							let location = err.split('.')
-							const parent = location[0]
-							const index = location[1]
-							const key = products[index].product_id
-
-							error["products"][key] = errroMsg
-						}
-					})
-					setError(error)
+					setError(err.response.data.message)
 				}
-			})
+		})
 	}
 
 	const cancelOrder = ({id, setCancelStatus}) => {
@@ -82,10 +66,22 @@ const useOrder = () => {
 			})
 	}
 
+	const createBuyToken = ({productCode, quantity, setStatus, setToken}) => {
+		const url = createBuyTokenApi(productCode, quantity);
+
+		axiosClient.post(url)
+			.then(res => {
+				setStatus(200)
+				setToken(res.data.token)
+			})
+	}
+
+ 
 	return {
 		createOrder,
 		getOrder,
-		cancelOrder
+		cancelOrder,
+		createBuyToken,
 	}
 }
 

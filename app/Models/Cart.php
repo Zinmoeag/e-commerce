@@ -11,10 +11,10 @@ class Cart extends Model
     protected $guarded = [];
 
     public function products(){
-        $this->belongsToMany(Product::class,'cart_product')->withPivot('quantity');
+       return $this->belongsToMany(Product::class,'cart_product')->withPivot('quantity', 'total_price');
     }
 
     public function user(){
-        $this->hasMany(User::class);
+        return $this->hasMany(User::class);
     }
 }

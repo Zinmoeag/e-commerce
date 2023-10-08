@@ -26,7 +26,6 @@ const Confirmation = () => {
 		})
 	}
 
-
 	useEffect(() => {
 		if(cancelStatus === 204){
 			navigate('/pos')

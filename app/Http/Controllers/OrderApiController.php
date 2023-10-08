@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Cart;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Gate;
@@ -36,47 +38,51 @@ class OrderApiController extends Controller
             'phone' => ['required', 'string'],
             'address' => ['required', 'string'],
             'payment' => ['required', 'string'],
-            'products.*.product_id' => ['required', 'exists:products,id'],
-            'products.*.quantity' => ['required', 'integer', 'min:1'],
+            'cart_token' => ['required']
+        ],[
+            'cart_token' => "Product is not selected"
         ]);
 
         if ($validator->fails()) {
             return response()->json(['message' => $validator->errors()], 422);
         }
 
+        $cart = Cart::where('token',request('cart_token'))->first();
+        if($cart){
 
-        $totalPrice = 0;
+            $totalPrice = $cart->total_price;
 
-        foreach ($request->input('products') as $product) {
-            $subtotal = $product['quantity'] * $product['price'];
-            $totalPrice += $subtotal;
+            // Create the order
+            $userId = auth()->id();
+            $order = Order::create([
+                'user_id' => $userId,
+                'order_date' => now(),
+                'phone' => $request->input('phone'),
+                'payment'=>$request->input('payment'),
+                'address' => $request->input('address'),
+                'total_price' => $totalPrice,
+            ]);
+
+
+            // Attach products and quantities
+            foreach ($cart->products as $product) {
+                $order->products()
+                    ->attach($product['id'],[
+                        "user_id" => $userId,
+                        "quantity" => $product->pivot->quantity,
+                    ]);
+            }
+
+            return response()->json([
+                'message' => 'Order Successfully Created',
+                'order_type' => 'cart',
+                'order_id' => $order->id,
+            ], 201);
+
+        }else{
+            return response()->json(['message' => 'cart is not exist', 404]);
         }
 
-        // Create the order
-        $userId = auth()->id();
-        $order = Order::create([
-            'user_id' => $userId,
-            'order_date' => now(),
-            'phone' => $request->input('phone'),
-            'payment'=>$request->input('payment'),
-            'address' => $request->input('address'),
-            'total_price' => $totalPrice,
-        ]);
-
-
-        // Attach products and quantities
-        foreach ($request->input('products') as $product) {
-            $order->products()
-                ->attach($product['product_id'],[
-                    "user_id" => $userId,
-                    "quantity" => $product["quantity"],
-                ]);
-        }
-
-        return response()->json([
-            'message' => 'Order Successfully Created',
-            'order_id' => $order->id
-        ], 201);
     }
 
     public function update($id)

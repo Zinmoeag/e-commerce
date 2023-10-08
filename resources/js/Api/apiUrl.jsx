@@ -6,8 +6,6 @@ export const categoryApi = () => {
 	return '/api/categories'
 }
 
-
-
 export const productApi = () => {
 	return `/api/products/${type}/${query}`
 }
@@ -19,6 +17,43 @@ export const productShowApi = (productCode) => {
 
 export const userOrderApi = () => {
 	return `/api/orders`
+}
+
+//cart  
+export const showCartApi = (token) => {
+	return `/api/show/cart/${token}`
+}
+
+export const createCartApi = () => {
+	return `/api/store/cart`
+}
+
+export const addItemCartApi = (token) => {
+	return `/api/add/item/${token}`
+}
+
+export const removeItemCartApi = (token) => {
+	return `/api/remove/item/${token}`
+}
+
+export const increaseItemApi = (token) => {
+	return `/api/increment/qty/${token}`
+}
+
+export const decreaseItemApi = (token) => {
+	return `/api/decrement/qty/${token}`
+}
+
+export const resetCartApi = (token) => {
+	return `/api/reset/cart/${token}`
+}
+
+export const createBuyTokenApi = (productCode,quantity) =>{
+	return `/api/buytoken/${productCode}?qty=${quantity}`
+}		
+
+export const getBuyingProductApi = (token) =>{
+	return `/api/order/buy/${token}`
 }
 
 export const orderCreateApi = () => {

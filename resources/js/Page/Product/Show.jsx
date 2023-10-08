@@ -1,23 +1,32 @@
 import useFetcher from '../../Hooks/useFetcher'
-import {productShowApi} from '../../Api/apiUrl'
-import {useParams} from 'react-router-dom'
-import {useState, useMemo} from 'react'
-import {useDispatch} from 'react-redux'
-import {addToCart} from '../../Redux/index'
-
+import {productShowApi, addItemCartApi} from '../../Api/apiUrl'
+import {useParams, useNavigate} from 'react-router-dom'
+import {useState, useMemo, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {addToCart, addingToCart} from '../../Redux/index'
+import useOrder from '../../Hooks/useOrder'
+import useBuy	from '../../Hooks/useBuy'
+import { useOutletContext } from "react-router-dom";
 
 const ProductShow = () => {
+	const [authUser,authStatus] = useOutletContext();
+	const {token} = useSelector(state => state.cart);
+	const {fetchBuyCart} = useBuy()
+	const [stockOut, setStockOut] = useState(false);
 
 	const {code} = useParams();
+	const productCode = code.split("_")[1];
+	const navigate = useNavigate()
 	const dispatch = useDispatch();
+	const {createBuyToken} = useOrder();
 
 	const url = useMemo(() => {
-		return productShowApi(code.split("_")[1])
+		return productShowApi(productCode)
 	},[code])
-
 
 	const [quantity, setQuantity] = useState(0)
 	const {data,loading,error} = useFetcher(url);
+
 	const pricePerOneItem = data?.price;
 	const totalPrice = quantity * pricePerOneItem;
 
@@ -25,27 +34,44 @@ const ProductShow = () => {
 	const handleAddtoCart = (e) => {
 		e.preventDefault();
 
-		//add 1 if user didnt selected quantity
+		// add 1 if user didnt selected quantity
 		if(quantity === 0){
 			setQuantity(prev => prev + 1)
 		}
 
-		const selectedProduct = {
-			id: data.id,
-			product_code : data.product_code,
-			name : data.name,
-			brand : data.brand.name,
-			pricePerOneItem : data.price,
-			quantity : quantity === 0 ? 1 : quantity,
-			totalPrice : (quantity === 0 ? 1 : quantity) * pricePerOneItem,
+		const product = {
+			id : data.id,
+			quantity : quantity === 0 ? 1 : quantity 
 		}
-
-
-		dispatch(addToCart(selectedProduct))
+		dispatch(addingToCart(token, product))
 	}
 
-	// console.log(Object.keys(data).length > 0)
+	const handleIncrement = () => {
+		if(data.stock_qty > quantity){
+			setQuantity(prev => prev+1)
+		}else{
+			setStockOut(true)
+		}
+	}
 
+
+	const handleDecrement = () => {
+		setStockOut(false)
+		setQuantity(prev => prev <= 0 ? 0 : prev-1)
+	}
+
+	const handleBuy = () => {
+
+		if(authStatus === 200){
+			fetchBuyCart({
+				type : 'buy',
+				product_id : data.id,
+				qty : quantity === 0 ? 1 : quantity,
+			})
+		}else{
+			navigate("/guest/login")
+		}
+	}
 
 	return (
 		<>
@@ -103,14 +129,14 @@ const ProductShow = () => {
 												<button
 													type="button" 
 													className="bg-white hover:bg-slate-900 hover:text-white border-slate-700 border-[0.1rem] text-slate-900 w-10 h-10"
-													onClick = {() => setQuantity(prev => prev+1)}
+													onClick = {handleIncrement}
 												> 
 													+ 
 												</button>
 
 												<input 
 													type="text" 
-													className="text-center outline-none border-slate-700 border-[0.1rem] flex-1"
+													className={`${stockOut ? 'border-red-600' : 'border-slate-700'} text-center outline-none border-[0.1rem] flex-1`}
 													onChange={(e) => setQuantity(Number(e.target.value)? Number(e.target.value) : 0)}
 													value={quantity}
 												/>
@@ -118,7 +144,7 @@ const ProductShow = () => {
 												<button
 													type="button" 
 													className="bg-white hover:bg-slate-900 hover:text-white border-slate-700 border-[0.1rem] text-slate-900 w-10 h-10"
-													onClick = {() => setQuantity(prev => prev <= 0 ? 0 : prev-1)}
+													onClick = {handleDecrement}
 												> 
 													-
 												</button>
@@ -135,11 +161,20 @@ const ProductShow = () => {
 										</div>
 									</form>
 
-									<button 
+
+									{authStatus === 401 && (
+										<div className="border-slate-900 border-t-[0.1rem] text-red-600 my-4 pt-4 text-center">
+											<p>You need to Login or Register first to buy products</p>
+										</div>
+									)}
+									
+									<button
+										onClick={handleBuy} 
 										className="bg-white hover:bg-zinc-900 hover:text-white border-[0.1rem] border-slate-900 text-slate-900 w-full py-2"
 									>
 									Buy it now
 									</button>
+								
 
 								</div>
 

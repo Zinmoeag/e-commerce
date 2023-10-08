@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use App\Models\product;
+use App\Models\BuyToken;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -34,7 +37,7 @@ class ProductApiController extends Controller
             'brand_id' => ['required', Rule::exists('brands', 'id')],
             'description' => ['required'],
             'stock_qty' => ['required', 'numeric'],
-            'price' => ['required', 'numeric']
+            'price' => ['required', 'numeric'],
         ];
 
         $validator = Validator::make(request()->all(), $rules);
@@ -114,6 +117,34 @@ class ProductApiController extends Controller
                 return ['Result' => 'Operation Fail'];
             }
         }
+    }
+    // createToken for buying product
+    public function createToken(Product $product)
+    {
+
+        $token = Str::random(30);
+
+        $quantity = request("qty");
+
+        $product->buyTokens()->create([
+            "token" => $token,
+            "qty" => $quantity,
+            "price" => $quantity * $product->price,
+            "expires_at" => Carbon::now()->addDay(),
+        ]);
+
+        return response()->json([
+            "token" => $token,
+        ],200);
+    }
+
+    // retrieve buying product by using token
+    public function getBuyingProduct(BuyToken $token)
+    {
+        $buyingProduct = $token->product;
+        return response()->json([
+            "buyingProduct" => $token->load(["product"])
+        ],200);
     }
 
     /**

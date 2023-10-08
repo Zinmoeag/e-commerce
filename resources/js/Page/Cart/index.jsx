@@ -6,7 +6,7 @@ import {Link, useNavigate} from 'react-router-dom'
 
 const Cart = ({isShow,setIsShow}) => {
 
-	const {	cartItems, totalAmount, totalQuantity } = useSelector(state => state.cart)
+	const {	cartItems, totalPrice, totalQuantity } = useSelector(state => state.cart)
 	const navigate = useNavigate();
 	const handleProgress = () => {
 		navigate("/pos/cart")
@@ -40,7 +40,7 @@ const Cart = ({isShow,setIsShow}) => {
 									</div>
 									<div className="flex justify-between mt-4">
 										<h3>Total</h3>
-										<h3 className="text-skin-secondary">{totalAmount} Ks</h3>
+										<h3 className="text-skin-secondary">{totalPrice} Ks</h3>
 									</div>
 								</div>
 
@@ -95,7 +95,7 @@ const Cart = ({isShow,setIsShow}) => {
 								</button>
 
 								<div className="w-[12rem]">
-									total - {totalAmount} Ks
+									total - {totalPrice} Ks
 								</div>
 
 							</div>

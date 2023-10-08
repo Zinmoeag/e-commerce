@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, useState} from 'react'
 import {useNavigate, useSearchParams} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
 import useAuth from "../Hooks/useAuth"
@@ -9,34 +9,42 @@ const withAuth = (WrappedComponents) => {
 
 		const navigate = useNavigate()
 		const [searchParams] = useSearchParams();
-		const {authUser, authStatus, getUser} = useAuth({url:null})
-		const next = searchParams.get("next") && searchParams.get("next")	
-    	const destination = next ? "/"+ next.split("_").join("/") : null;
+		const {user,status} = useSelector( state => state.auth)
+		const {getUser} = useAuth({url:null})
+		const next = searchParams.get("next") && searchParams.get("next")
+		const step = searchParams.get("step") ?? 1;		
+    	const destination = next ? "/"+ next.split("%_").join("/") : null;
 
-    	// console.log(destination)
+    	const goBacktoPrevPage =() => {
 
+    		navigate(-Math.abs(step));
+    	}
 
 		useEffect(() => {
-			if(!authStatus){
+			if(!status){
 				getUser();
-			}else if(authStatus === 200){
+			}else if(status === 200){
 				//first need to quit from login page
-				navigate(-1)
-				if(destination){
+					goBacktoPrevPage();
+			}
+
+			return () => {
+				if(destination && status === 200){
 					 //if authenticate user has to redirect to destination page
-					 window.location.href = destination
+					navigate(destination)
 				}
 			}
-		},[authStatus])
+		},[status])
 
 		
 		return (
 			<div>
-				{(authStatus === 401 || !authStatus)  && (
+				{(status === 401 || !status)  && (
 					<WrappedComponents 
 						{...props}
-						authUser = {authUser}
-						authStatus = {authStatus}
+						authUser = {user}
+						authStatus = {status}
+						step = {step}
 					/>
 				)}
 			</div>
