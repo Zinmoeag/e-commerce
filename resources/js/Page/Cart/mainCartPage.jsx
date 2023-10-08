@@ -2,13 +2,13 @@ import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {useSelector, useDispatch} from 'react-redux'
 import MainCartItem from './components/MainCartItem'
-import {resetItems} from '../../Redux/index'
+import {resetingCart} from '../../Redux/index'
 import {Link} from 'react-router-dom'
 
 const MainCartPage = () => {
 
 	const { user, status } = useSelector(state => state.auth)
-	const {	cartItems, totalAmount, totalQuantity } = useSelector(state => state.cart)
+	const {	token, cartItems, totalPrice, totalQuantity } = useSelector(state => state.cart)
 	const navigate = useNavigate()
 
 	const [showInstruction , setShowInstruction] = useState(false)
@@ -18,14 +18,18 @@ const MainCartPage = () => {
 
 		if(totalQuantity > 0){
 			if(status === 200){
-				navigate('/user/order')
+				navigate(`/user/order/ct_cart/${token}`)
 			}else{
 				setShowInstruction(true)
-				navigate('/guest/login?next=user_order')
+				navigate(`/guest/login?next=user%_order%_ct_cart%_${token}`)
 			}
 		}else{
 			setShowInstruction(true)
 		}
+	}
+
+	const handleResetCart = () => {
+		dispatch(resetingCart(token));
 	}
 
 	return (
@@ -51,7 +55,7 @@ const MainCartPage = () => {
 					<p>Make it Order Now</p>
 					<ul className="text-slate-600">
 						<li>qunatity  - {totalQuantity}</li>
-						<li>total - {totalAmount} MMK</li>
+						<li>total - {totalPrice} MMK</li>
 					</ul>
 					<button
 						onClick = {handleOrder}
@@ -70,7 +74,7 @@ const MainCartPage = () => {
 					<div className="border-b-[0.05rem] border-slate-400 my-6"></div>
 
 					<button
-						onClick={() => dispatch(resetItems())}
+						onClick={handleResetCart}
 						className='mt-2 bg-red-500 text-white hover:bg-slate-800 hover:text-white w-full py-1'
 					>
 						Remove All ITems

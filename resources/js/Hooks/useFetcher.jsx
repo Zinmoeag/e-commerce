@@ -9,7 +9,6 @@ export default function useFetcher(uri){
 
 
 	const fetchingData = async (uri) => {
-
 		setLoading(true);
 		setError(null);
 		setData([]);

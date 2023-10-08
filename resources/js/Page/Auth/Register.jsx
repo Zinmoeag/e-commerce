@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../Hooks/useAuth";
 import withGuest from '../../Utilities/withGuest'
 
-const Register = () => {
+const Register = ({step}) => {
     const {
         register,
         handleSubmit,

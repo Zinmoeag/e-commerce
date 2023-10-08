@@ -13,6 +13,7 @@ import ChangePassword from './Page/User/ChangePassword'
 import ChangeEmail from './Page/User/ChangeEmail'
 import MainCartPage from './Page/Cart/mainCartPage'
 import Order from './Page/Order/Index.jsx'
+import BuyOrder from './Page/Order/BuyOrder.jsx'
 import Confirmation from './Page/Order/Confirmation.jsx'
 
 
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
 				element : <Profile />,
 			},
 			{
-				path:"user/order",
+				path:"user/order/:cartType/:token",
 				element : <Order />,
 			},
 			{

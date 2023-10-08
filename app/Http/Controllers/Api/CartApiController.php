@@ -12,131 +12,276 @@ use Str;
 
 class CartApiController extends Controller
 {
-    public function showCart()
+    public function showCart(Cart $cart)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            $cart = $user->carts->first();
-            if ($cart) {
-                return response()->json(['cart' => $cart, 'message' => 'This is your cart items']);
-            } else {
-                return response()->json(['message' => 'Cart not found']);
-            }
-        } else {
-            return response()->json(['message' => 'User not authenticated']);
-        }
+        $cartProducts = $cart->products;
+        $totalQty = $cartProducts->reduce(function ($carry, $product){
+            $quantity = $product['pivot']['quantity'];
+            return $carry + $quantity;
+        },0);
+
+        $totalPrice = $cartProducts->reduce(function ($carry, $product){
+            $totalPrice = $product['pivot']['total_price'];
+            return $carry + $totalPrice;
+        },0);
+
+
+        $cart->total_quantity = $totalQty;
+        $cart->total_price = $totalPrice;
+        $cart->save();
+
+        return response()->json([
+           'cartItem' => $cartProducts,
+            'cart' => $cart,
+            'message' => 'Cart created successfully'
+        ],200);
     }
 
 
-
     public function storeCart(Request $request)
-    {
-        if (Auth::check()) {
-            $user = Auth::user();
-            $products = $request->input('products');
-            $totalPrice = 0;
-
-            foreach ($products as $product) {
-                $subtotal = $product['quantity'] * $product['price'];
-                $totalPrice += $subtotal;
-            }
+    {   
+        if($request->input('type') === 'buy'){
+            $productId = $request->input('product_id');
+            $productsQty = $request->input('qty');
+            $product = Product::findOrFail($productId);
+            $productPrice = $product->price;
 
             $cart = Cart::create([
                 'expire_date' => now()->addDays(3),
                 'token' => Str::uuid(),
-                'total_quantity' => 0,
-                'total_price' => $totalPrice,
+                'total_quantity' => $productsQty,
+                'total_price' => $productsQty * $productPrice,
             ]);
 
-            return response()->json(['cart' => $cart, 'message' => 'Cart created successfully']);
-        } else {
-            return response()->json(['message' => 'User not authenticated']);
-        }
-    }
+            $cart->products()->attach($productId,[
+                'quantity' => $productsQty,
+                'total_price' => $productsQty * $productPrice,
+            ]);
 
-    public function resetCart(Request $request)
+            return response()->json([
+                'cartItem' => $cart->products,
+                'cart' => $cart,
+                'message' => $request->input('type'),
+            ],200);
+
+        }else{     
+            $cart = Cart::create([
+                'expire_date' => now()->addDays(3),
+                'token' => Str::uuid(),
+                'total_quantity' => 0,
+                'total_price' => 0,
+            ]);
+             return response()->json([
+                'cartItem' => $cart->products,
+                'cart' => $cart,
+                'message' => request()->all(),
+            ],200);
+        }
+
+        }
+
+
+    public function resetCart(Cart $cart)
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            $cart = $user->carts;
+        $cart->delete();
+        return response()->json([
+            "message" => "Cart Reset Successfully"
+        ],204);
+    }
 
-            if ($cart) {
-                $cart->delete();
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
-                return response()->json(["message" => "Cart Reset Successfully"]);
-            } else {
-                return response()->json(["message" => "Cart not found"]);
+
+    public function addItem(Cart $cart){
+
+        $validator = Validator::make(request()->all(), [
+            'product_id' =>  ["required",'exists:products,id'],
+            'quantity' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 422);
+        }
+            $cartProducts = $cart->products;
+            $productId = request('product_id');
+            $quantity =  request('quantity');
+            $product = Product::findOrFail($productId);
+
+            //sum of existing item 
+            $totalQty = $cartProducts->reduce(function ($carry, $product){
+                $quantity = $product['pivot']['quantity'];
+                return $carry + $quantity;
+            },0);
+
+
+            $totalPrice = $cartProducts->reduce(function ($carry, $product){
+                $totalPrice = $product['pivot']['total_price'];
+                return $carry + $totalPrice;
+            },0);
+
+
+            if($cartProducts->contains($productId)){
+                //increase qty if product already exist in cart
+                $targetProduct = $cart->products()
+                            ->where("products.id", $productId)
+                            ->first();
+
+                $pivotRecord = $targetProduct->pivot;
+
+                $existedQty = $pivotRecord->quantity;
+                $newQty = $existedQty + $quantity;
+                $existedPrice = $pivotRecord->total_price;
+                $newPice = $existedPrice + ($quantity * $product->price);
+
+                $pivotRecord->quantity = $newQty;
+                $pivotRecord->total_price = $newPice;
+                $pivotRecord->save();
+
+            }else{  
+                // add item to cart
+                $cart->products()->syncWithoutDetaching([
+                    $productId => [
+                        'quantity'=>$quantity, 
+                        'total_price' => $quantity * $product->price
+                    ],
+                ]);
+
+                $targetProduct = $cart->products()
+                            ->where("products.id", $productId)
+                            ->first();
             }
-        } else {
-            return response()->json(["message" => "User not authenticated"]);
-        }
+
+            $cart->total_quantity = $totalQty + $quantity;
+            $cart->total_price = $totalPrice + ($targetProduct->price * $quantity);
+            $cart->save();
+
+            return response()->json([
+                "product" => $targetProduct,
+                'cart' => $cart,
+            ],200);
+
     }
 
+    public function removeItem(Cart $cart){
 
-    public function addItem(Request $request,$productId){
-        if(Auth::check()){
-            $user = Auth::user();
-            $cart = $user->cart;
-            $product = Product::findOrFail($productId);
-            $quantity = $request->input('quantity',1);
-            $cart->products()->syncWithoutDetaching([$productId => ['quantity'=>$quantity]]);
-            return response()->json(['message'=>'Item added to cart successfully']);
+            $validator = Validator::make(request()->all(), [
+                'product_id' =>  ["required",'exists:products,id'],
+            ]);
 
-        }else{
-            return response()->json(['message'=>'User not authenticated']);
-
-        }
-    }
-
-
-
-
-    public function removeItem(Request $request,$productId){
-        if(Auth::check()){
-            $user = Auth::user();
-            $cart = $user->cart;
-            $product = Product::findOrFail($productId);
-            $cart->products()->detach($productId);
-            return response()->json(['message'=>'Item removed successfully']);
-
-        }else{
-            return response()->json(['message'=>'User not authenticated']);
-        }
-    }
-
-    public function incrementQty(Request $request,$productId){
-        if(Auth::check()){
-            $user = Auth::user();
-            $cart = $user->carts;
-            $product = Product::findOrFail($productId);
-            if($cart->products->contains($productId)){
-                $currentQty = $cart->products->find($productId)->pivot->quantity;
-                $newQty = $currentQty +1;
-
-                $cart->products()->updateExistingPivot($productId,['quantity'=>$newQty]);
-            }    return response()->json(['message' => 'Quantity incremented successfully']);
-        } else {
-            return response()->json(['message' => 'Product not found in the cart']);
-        }
-    }
-
-    public function decrementQty(Request $request,$productId){
-        if(Auth::check()){
-            $user = Auth::user();
-            $cart = $user->carts;
-            $product = Product::findOrFail($productId);
-            if($cart->products->contains($productId)){
-                $currentQty = $cart->products->find($productId)->pivot->quantity;
-                if($currentQty > 1){
-                    $newQuty = $currentQty -1;
-                    $cart->products()->updateExistingPivot($productId,['quantity'=>$newQuty]);
-                    return response()->json(['message' => 'Quantity decrement successfully']);
-                }
-
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()], 422);
             }
-        } else {
-            return response()->json(['message' => 'Product not found in the cart']);
+
+
+            //get quantity and price of remove item
+            $targetProduct = $cart->products->firstWhere("id",request('product_id'));
+            $quantity = $targetProduct->pivot->quantity;
+            $totalPrice = $targetProduct->pivot->total_price;
+
+            $cart->total_quantity = $cart->total_quantity - $quantity;
+            $cart->total_price  = $cart->total_price - $totalPrice;
+            $cart->save();
+
+            $cart->products()->detach(request('product_id'));
+
+            return response()->json([
+                'targetProduct' => $targetProduct,
+                'cart' => $cart,
+                'message' => 'deleted',
+            ],200);
+    }
+
+    public function incrementQty(Cart $cart){
+
+        $validator = Validator::make(request()->all(), [
+            'product_id' =>  ["required",'exists:products,id'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 422);
         }
+
+        $IncreaseQty = 1;
+
+        if($cart->products->contains(request('product_id'))){
+
+            $targetProduct = $cart->products()
+                            ->where("products.id", request('product_id'))
+                            ->first();
+
+            $pivotRecord = $targetProduct->pivot;
+            $currentQty = $pivotRecord->quantity;
+
+            if($targetProduct->stock_qty > $currentQty){
+
+                $newQty = $currentQty + $IncreaseQty;
+
+                $currentPrice = $pivotRecord->total_price;
+                $newPrice = $currentPrice + ($targetProduct->price * $IncreaseQty);
+
+                //update quantity and price for pivot record
+                $pivotRecord->quantity = $newQty;
+                $pivotRecord->total_price = $newPrice;
+                $pivotRecord->save();
+
+                //update total quantity and price for cart
+                $cart->total_quantity = $cart->total_quantity + $IncreaseQty;
+                $cart->total_price = $cart->total_price + ($targetProduct->price * $IncreaseQty);
+                $cart->save();
+
+                return response()->json([
+                    'product' => $targetProduct,
+                    'cart' => $cart,
+                    'message' => 'Quantity incremented successfully',
+                ]);
+
+            }else{
+                return response()->json([
+                    'error' => [
+                        $targetProduct->id => "stock out"
+                    ]
+                ],422);
+            }
+        }   
+    }
+
+    public function decrementQty(Cart $cart){
+
+        $validator = Validator::make(request()->all(), [
+            'product_id' =>  ["required",'exists:products,id'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->errors()], 422);
+        }
+
+        $decreaseQty = 1;
+
+        if($cart->products->contains(request('product_id'))){
+            $targetProduct = $cart->products()
+                            ->where("products.id", request('product_id'))
+                            ->first();
+            $pivotRecord = $targetProduct->pivot;
+
+            $currentQty = $pivotRecord->quantity;
+            $newQty = $currentQty - $decreaseQty;
+
+            $currentPrice = $pivotRecord->total_price;
+            $newPrice = $currentPrice - ($targetProduct->price * $decreaseQty);
+
+            //update quantity and price for pivot record
+            $pivotRecord->quantity = $newQty;
+            $pivotRecord->total_price = $newPrice;
+            $pivotRecord->save();
+
+            //update total quantity and price for cart
+            $cart->total_quantity = $cart->total_quantity - $decreaseQty;
+            $cart->total_price = $cart->total_price - ($targetProduct->price * $decreaseQty);
+            $cart->save();
+
+            return response()->json([
+                'product' => $targetProduct,
+                'cart' => $cart,
+                'message' => 'Quantity incremented successfully',
+            ]);
+        } 
     }
 }

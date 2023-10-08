@@ -120,11 +120,7 @@ const Product = () => {
 									</div>
 								)) : (
 									<div className="col-span-12 p-4 flex items-center justify-center h-[10rem]">
-										<img 
-											src="http://localhost:8000/uploads/loading.gif" 
-											alt="" 
-											className="w-24 h-24"
-										/>
+										<p>Loading ...</p>
 									</div>
 								)}
 

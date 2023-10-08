@@ -5,7 +5,7 @@ import {useEffect, useState} from 'react';
 import useAuth from '../../Hooks/useAuth'
 import withGuest from '../../Utilities/withGuest'
 
-const Login = () => {
+const Login = ({step}) => {
     const {
         register,
         handleSubmit,
@@ -18,7 +18,6 @@ const Login = () => {
     const [status, setStatus] = useState(null);
     const [searchParams] = useSearchParams();
     const next = searchParams.get("next")
-
 
     const {login,authStatus} = useAuth({
         url:'/api/login'
@@ -84,7 +83,7 @@ const Login = () => {
                             {error.message && <p className="text-red-600">{error.message}</p>}
 
                             {next ? (
-                                <Link to={`/guest/register?next=${next}`} className="text-blue-600">
+                                <Link to={`/guest/register?next=${next}&step=${step + 1}`} className="text-blue-600">
                                     Create An Account ?
                                 </Link>
                             ) : (

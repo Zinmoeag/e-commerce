@@ -64,11 +64,12 @@ Route::post('/login',[UserProfileApiController::class, 'UserLogin']);
 
 // For Cart Api
 Route::controller(CartApiController::class)->group(function(){
-    Route::get('/show/cart','showCart');
+    Route::match(['get', 'post'],'/show/cart/{cart:token}','showCart');
     Route::post('/store/cart','storeCart');
-    Route::post('/reset/cart','resetCart');
-    Route::match(['get','post'],'/add/item/{productId}','addItem');
-    Route::match(['get','post'],'/remove/item/{productId}','removeItem');
-    Route::match(['get','post'],'/increment/qty/{productId}','incrementQty');
-    Route::match(['get','post'],'/decrement/qty/{productId}','decrementQty');
+    Route::post('/reset/cart/{cart:token}','resetCart');
+
+    Route::match(['get','post'],'/add/item/{cart:token}','addItem');
+    Route::match(['get','post'],'/remove/item/{cart:token}','removeItem');
+    Route::match(['get','post'],'/increment/qty/{cart:token}','incrementQty');
+    Route::match(['get','post'],'/decrement/qty/{cart:token}','decrementQty');
 });

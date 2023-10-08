@@ -4,20 +4,34 @@ import Cart from '../Page/Cart/index'
 import {useState, useEffect} from "react"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {useSelector} from 'react-redux'
+import {useSelector, useDispatch} from 'react-redux'
 import useAuth from '../Hooks/useAuth'
+import {fetchCart} from '../Redux/index'
+import {showCartApi} from '../Api/apiUrl'
 
 const AppLayout = () => {
 
-
 	const [isCartShow, setIsCartShow] = useState(false)
 	const {getUser, authUser, authStatus} = useAuth({url:null})
+	const {token} = useSelector(state => state.cart)
+
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		if(!authStatus){
 			getUser()
 		}
 	},[authStatus])
+
+
+	useEffect(() => {
+		if(token){	
+			const url = showCartApi(token);
+			dispatch(fetchCart(url));
+		}else{
+			dispatch(fetchCart());
+		}
+	},[token])
 
 	return (
 		<>
@@ -26,7 +40,9 @@ const AppLayout = () => {
 					setIsCartShow={setIsCartShow}
 				/>
 				<div className="md:mt-[7.5rem] mt-[4rem] bg-slate-100">
-					<Outlet />
+					<Outlet 
+						context={[authUser,authStatus]}
+					/>
 				</div>
 
 				<Cart
