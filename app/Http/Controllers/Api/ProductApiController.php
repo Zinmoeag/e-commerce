@@ -163,7 +163,7 @@ class ProductApiController extends Controller
     }
 
     public function BestSellerProducts(){
-        $bestSeller = Product::orderBy('score','desc')->get();
+        $bestSeller = Product::orderBy('score','desc')->take(10)->get();
         return response()->json([
             'message'=>'These are best seller products',
             'bestSeller'=>$bestSeller]);
