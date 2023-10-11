@@ -56,7 +56,7 @@ class ProductApiController extends Controller
                 'stock_qty' => request()->stock_qty,
                 'price' => request()->price
             ];
-            
+
             $result = product::create($formData);
             if ($result) {
                 return ['Result' => 'Data has been saved'];
@@ -76,7 +76,7 @@ class ProductApiController extends Controller
         if (!$product) {
             return response()->json(['message' => 'brand not found'], 404);
         }
-    
+
         // Return the product as a JSON response
         return response()->json($product);
     }
@@ -110,7 +110,7 @@ class ProductApiController extends Controller
             }
 
             $result = $product->update(request()->all());
-            
+
             if ($result) {
                 return ['Result' => 'Data has been updated'];
             } else {
@@ -161,4 +161,12 @@ class ProductApiController extends Controller
             return ['Result' => 'Operation Fail'];
         }
     }
+
+    public function BestSellerProducts(){
+        $bestSeller = Product::orderBy('score','desc')->get();
+        return response()->json([
+            'message'=>'These are best seller products',
+            'bestSeller'=>$bestSeller]);
+    }
 }
+

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -150,4 +151,25 @@ class OrderApiController extends Controller
             'message' => 'Order deleted Successfully',
         ], 204);
     }
+
+    public function placeOrder(Request $request) {
+        $orderId = $request->input('order_id');
+
+        try {
+            $order = Order::findOrFail($orderId);
+            foreach ($order->products as $product) {
+                $product->increment('score');
+            }
+
+            return response()->json([
+                'message' => 'Score incremented for all products',
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Order not found or an error occurred.',
+            ]);
+        }
+    }
+
+
 }
