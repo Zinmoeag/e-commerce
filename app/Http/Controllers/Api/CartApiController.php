@@ -39,7 +39,7 @@ class CartApiController extends Controller
 
 
     public function storeCart(Request $request)
-    {   
+    {
         if($request->input('type') === 'buy'){
             $productId = $request->input('product_id');
             $productsQty = $request->input('qty');
@@ -64,7 +64,7 @@ class CartApiController extends Controller
                 'message' => $request->input('type'),
             ],200);
 
-        }else{     
+        }else{
             $cart = Cart::create([
                 'expire_date' => now()->addDays(3),
                 'token' => Str::uuid(),
@@ -105,7 +105,7 @@ class CartApiController extends Controller
             $quantity =  request('quantity');
             $product = Product::findOrFail($productId);
 
-            //sum of existing item 
+            //sum of existing item
             $totalQty = $cartProducts->reduce(function ($carry, $product){
                 $quantity = $product['pivot']['quantity'];
                 return $carry + $quantity;
@@ -135,11 +135,11 @@ class CartApiController extends Controller
                 $pivotRecord->total_price = $newPice;
                 $pivotRecord->save();
 
-            }else{  
+            }else{
                 // add item to cart
                 $cart->products()->syncWithoutDetaching([
                     $productId => [
-                        'quantity'=>$quantity, 
+                        'quantity'=>$quantity,
                         'total_price' => $quantity * $product->price
                     ],
                 ]);
@@ -240,7 +240,7 @@ class CartApiController extends Controller
                     ]
                 ],422);
             }
-        }   
+        }
     }
 
     public function decrementQty(Cart $cart){
@@ -282,6 +282,6 @@ class CartApiController extends Controller
                 'cart' => $cart,
                 'message' => 'Quantity incremented successfully',
             ]);
-        } 
+        }
     }
 }

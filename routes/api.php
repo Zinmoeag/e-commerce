@@ -73,3 +73,7 @@ Route::controller(CartApiController::class)->group(function(){
     Route::match(['get','post'],'/increment/qty/{cart:token}','incrementQty');
     Route::match(['get','post'],'/decrement/qty/{cart:token}','decrementQty');
 });
+
+// For Best-Seller
+Route::match(['get','post'],'place/order',[OrderApiController::class,'PlaceOrder']);
+Route::match(['get','post'],'best_seller/products',[ProductApiController::class,'BestSellerProducts']);
