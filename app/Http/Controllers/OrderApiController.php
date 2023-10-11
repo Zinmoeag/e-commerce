@@ -157,8 +157,6 @@ class OrderApiController extends Controller
 
         try {
             $order = Order::findOrFail($orderId);
-            $success = true;
-
             foreach ($order->products as $product) {
                 $product->increment('score');
             }
