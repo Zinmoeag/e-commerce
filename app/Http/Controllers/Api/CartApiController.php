@@ -148,7 +148,7 @@ class CartApiController extends Controller
                             ->where("products.id", $productId)
                             ->first();
             }
-
+            
             $cart->total_quantity = $totalQty + $quantity;
             $cart->total_price = $totalPrice + ($targetProduct->price * $quantity);
             $cart->save();

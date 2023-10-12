@@ -3,9 +3,9 @@ import Input from '../../Components/Input'
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {useSelector, useDispatch} from 'react-redux'
-import {updatePasswordApi} from "../../Api/ApiUrl"
+import {updatePasswordApi} from "../../Api/apiUrl"
 import useAuth from "../../Hooks/useAuth"
-import {updateEmailApi} from '../../Api/ApiUrl'
+import {updateEmailApi} from '../../Api/apiUrl'
 import withAuth from '../../Utilities/withAuth'
 
 const ChangePassword = ({authUser}) => {

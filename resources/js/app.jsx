@@ -6,13 +6,16 @@ import Main from './main';
 import {BrowserRouter} from 'react-router-dom'
 import {Provider} from 'react-redux'
 import store from './Redux/store'
+import {AppStateProvider} from './Context/AppStateContext'
 
 
 ReactDOM.createRoot(document.getElementById('app')).render(  
 
 	<>
 		<Provider store={store}>
-		    <Main />   
+			<AppStateProvider>
+			    <Main />   
+			</AppStateProvider>
 		</Provider >
 	</>
 

@@ -1,5 +1,9 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
+import useFetcher from '../../../Hooks/useFetcher';
+import {bestSellerApi} from '../../../Api/apiUrl'
+import {Link} from 'react-router-dom'
+
 
 // Import Swiper styles
 import 'swiper/css';
@@ -12,6 +16,13 @@ import 'swiper/css/autoplay';
 const items = [1,2,3,4];
 
 const BestSeller = () => {
+	
+	const url = bestSellerApi();
+
+	const {data, error, loading} = useFetcher(url)
+
+	const {bestSeller} = data || [];
+
 	return (
 		<div className="my-20">
 			<div className="lg:grid sm:grid-cols-12">
@@ -24,10 +35,10 @@ const BestSeller = () => {
 					</div>
 				</div>
 
-				<div className="col-span-8 bg-slate-900 md:p-8 p-4">
+				<div className="col-span-8 bg-skin-secondary md:pe-6">
 					 <Swiper
 				 	  modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
-				      spaceBetween={10}
+				      spaceBetween={0}
 				      slidesPerView={2}
 				      autoplay={{ delay: 3000 }}
 				      pagination={{ clickable: true }}
@@ -35,15 +46,28 @@ const BestSeller = () => {
 				      onSlideChange={() => {}}
 				    >
 				    {
-				    	items && items.map((item,i) => (
+				    	bestSeller && bestSeller.map((item,i) => (
 
 							      <SwiperSlide key={i}>
-								     <div className="md:h-[30rem] sm:h-[20rem] ">
-								     	<img 
-									     	src="https://i.pinimg.com/564x/c9/07/be/c907be065bfa9de3d57339abfdb0e00b.jpg" 
-									     	alt="" 
-									     	className="h-full w-full object-cover object-center"
-								     	/>
+								     <div className="md:h-[25rem] sm:h-[20rem] ">
+								     	{ item.image ? (
+								     		<Link 
+									     		to ={`/pos/products/prodxts_${item.product_code}`}
+									     	>
+									     		<img 
+										     	src={item.image} 
+										     	alt="" 
+										     	className="h-full w-full object-cover object-center"
+										     	/>
+								     		</Link >
+								     	
+								     	) : (
+									     	<img 
+										     	src="https://i.pinimg.com/564x/c9/07/be/c907be065bfa9de3d57339abfdb0e00b.jpg" 
+										     	alt="" 
+										     	className="h-full w-full object-cover object-center"
+									     	/>
+								     	)}
 								     </div>
 							      </SwiperSlide>
 

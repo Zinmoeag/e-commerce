@@ -7,11 +7,14 @@ import {addToCart, addingToCart} from '../../Redux/index'
 import useOrder from '../../Hooks/useOrder'
 import useBuy	from '../../Hooks/useBuy'
 import { useOutletContext } from "react-router-dom";
+import {useAppStateContext} from '../../Context/AppStateContext'
+import Footer from '../../Components/Footer'
 
 const ProductShow = () => {
 	const [authUser,authStatus] = useOutletContext();
-	const {token} = useSelector(state => state.cart);
+	const {token,cartItems} = useSelector(state => state.cart);
 	const {fetchBuyCart} = useBuy()
+	const {setIsCartShow} = useAppStateContext();
 	const [stockOut, setStockOut] = useState(false);
 
 	const {code} = useParams();
@@ -19,36 +22,60 @@ const ProductShow = () => {
 	const navigate = useNavigate()
 	const dispatch = useDispatch();
 	const {createBuyToken} = useOrder();
+	const [status, setStatus] = useState(null);
 
 	const url = useMemo(() => {
 		return productShowApi(productCode)
 	},[code])
 
-	const [quantity, setQuantity] = useState(0)
-	const {data,loading,error} = useFetcher(url);
+	const [quantity, setQuantity] = useState(0);
 
+	const {data,loading,error} = useFetcher(url);
 	const pricePerOneItem = data?.price;
 	const totalPrice = quantity * pricePerOneItem;
-
+	const [availStock, setAvailStock] = useState((0))
+	const initialStock = data?.stock_qty;
+	const [qtyErr, setQtyErr] = useState(false)
 
 	const handleAddtoCart = (e) => {
 		e.preventDefault();
-
-		// add 1 if user didnt selected quantity
-		if(quantity === 0){
-			setQuantity(prev => prev + 1)
+		const isThereAvailable = (availStock - quantity);
+			// console.log()
+		if(isThereAvailable >= 0){
+			// add 1 if user didnt selected quantity
+			if(quantity === 0){
+				setQtyErr(true)
+			}else{
+				const product = {
+					id : data.id,
+					quantity : quantity === 0 ? 1 : quantity 
+				}
+				dispatch(addingToCart(token, product , setStatus))
+				setIsCartShow(true)
+			}
 		}
-
-		const product = {
-			id : data.id,
-			quantity : quantity === 0 ? 1 : quantity 
-		}
-		dispatch(addingToCart(token, product))
 	}
 
+	useEffect(() => {
+			if(Object.keys(data).length > 0){
+				const index = cartItems.findIndex(item => item.id === data.id);
+
+				if(index >= 0){
+					const avail = initialStock - cartItems[index]?.pivot.quantity || 0;
+					setAvailStock(avail)
+				}else{
+					setStockOut(false)
+					setAvailStock(initialStock)
+				}
+			}
+
+			setQuantity(0)
+	},[data,status,cartItems,setAvailStock,availStock])
+
 	const handleIncrement = () => {
-		if(data.stock_qty > quantity){
+		if(availStock > quantity){
 			setQuantity(prev => prev+1)
+			setQtyErr(false)
 		}else{
 			setStockOut(true)
 		}
@@ -61,7 +88,6 @@ const ProductShow = () => {
 	}
 
 	const handleBuy = () => {
-
 		if(authStatus === 200){
 			fetchBuyCart({
 				type : 'buy',
@@ -87,7 +113,7 @@ const ProductShow = () => {
 						<div className="flex-none lg:w-[25rem] sm:w-[20rem] flex justify-center mb-8 md:mb-0">
 							<div className="lg:w-[20rem] lg:h-[25rem] md:w-[16rem] md:h-[20rem] w-[20rem] h-[25rem]">
 								<img 
-							     	src="https://i.pinimg.com/564x/c9/07/be/c907be065bfa9de3d57339abfdb0e00b.jpg" 
+							     	src={data.image} 
 							     	alt="" 
 							     	className="h-full w-full object-cover object-center"
 						     	/>
@@ -125,6 +151,8 @@ const ProductShow = () => {
 										<div className="w-full my-4">
 											<h3 className="text-xl text-slate-900">Add To Cart</h3>
 											<p className="text-slate-900">Quantity</p>
+											{qtyErr && <p className="text-red-600">Quantity must be at least 1 unit</p>}
+											<p className={`${data.stock_qty > 0 ? "text-slate-800" : "text-red-500"}`}>Available Qty : {data.stock_qty}</p>
 											<div className='flex gap-[0.25rem] my-4'>
 												<button
 													type="button" 
@@ -190,8 +218,8 @@ const ProductShow = () => {
 						</div>
 					</div>
 				)}
-
 			</section>
+
 		</>
 
 	)

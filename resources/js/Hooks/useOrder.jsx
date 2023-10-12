@@ -3,7 +3,8 @@ import {
 	userOrderApi, 
 	deleteOrder, 
 	createBuyTokenApi, 
-	getBuyingProductApi
+	getBuyingProductApi,
+	editOrderAddressApi
 } from '../Api/apiUrl'
 import axiosClient from '../Libs/axios-client'
 import {useSelector, useDispatch} from 'react-redux'
@@ -46,10 +47,27 @@ const useOrder = () => {
 
 			})
 			.catch(err => {
+				console.log(err)
 				if(err.response.status === 422){
 					setError(err.response.data.message)
 				}
-		})
+			})
+	}
+
+	const editOrderAddress = ({id, info, setError, setStatus}) => {
+		const url = editOrderAddressApi(id)
+
+		axios.post(url,info)
+			.then(res => {
+				setStatus(res.status)
+			})
+			.catch(err => {
+				if(err.response.status === 422){
+					setError(err.response.data.message)
+				}
+			})
+
+
 	}
 
 	const cancelOrder = ({id, setCancelStatus}) => {
@@ -80,6 +98,7 @@ const useOrder = () => {
 	return {
 		createOrder,
 		getOrder,
+		editOrderAddress,
 		cancelOrder,
 		createBuyToken,
 	}

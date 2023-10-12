@@ -6,6 +6,7 @@ import useFetcher from '../../Hooks/useFetcher'
 import {useParams, useNavigate} from 'react-router-dom'
 import {checkConfirmation} from '../../Api/apiUrl'
 import useOrder from '../../Hooks/useOrder'
+import {Link} from 'react-router-dom'
 
 const Confirmation = () => {
 
@@ -24,6 +25,10 @@ const Confirmation = () => {
 			id : id,
 			setCancelStatus : setCancelStatus,
 		})
+	}
+
+	const handleEdit = () => {
+		navigate('/user/order/edit-address/'+id)
 	}
 
 	useEffect(() => {
@@ -88,9 +93,10 @@ const Confirmation = () => {
 								</button>
 
 								<button
+									onClick={handleEdit}
 									className="bg-slate-800 text-white px-4 py-1 hover:bg-slate-600"
 									type="button"
-								>Edit Order
+								>Edit Order Address
 								</button>
 
 							</div>
@@ -102,6 +108,7 @@ const Confirmation = () => {
 							{products && products.map(product => (
 								<CartItem
 									key={product.id}
+									image={product.image}
 									name={product.name}
 									product_code={product.product_code}
 									quantity = {product.pivot.quantity}

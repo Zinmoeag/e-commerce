@@ -15,6 +15,8 @@ import MainCartPage from './Page/Cart/mainCartPage'
 import Order from './Page/Order/Index.jsx'
 import BuyOrder from './Page/Order/BuyOrder.jsx'
 import Confirmation from './Page/Order/Confirmation.jsx'
+import About from './Page/About/Index.jsx'
+import OrderEditAddress from './Page/Order/OrderEditAddress.jsx'
 
 
 
@@ -56,6 +58,14 @@ const router = createBrowserRouter([
 			{
 				path:"user/order/confirmation/:id",
 				element : <Confirmation />,
+			},
+			{
+				path:"user/order/edit-address/:id",
+				element : <OrderEditAddress />,
+			},
+			{
+				path:"/about-us",
+				element : <About />
 			},
 			{
 				path:"user/edit",

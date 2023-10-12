@@ -69,15 +69,17 @@ const Cart = ({isShow,setIsShow}) => {
 
 									{/*item*/}
 
-									{cartItems.length !== 0 ? cartItems.map(item => (
-										<CartItem
-											key={item.id} 
-											cartItem={item}
-										/>
-									)) : (
+									<div className="flex flex-col gap-8 md:gap-2 px-2">
+										{cartItems.length !== 0 ? cartItems.map(item => (
+											<CartItem
+												key={item.id} 
+												cartItem={item}
+											/>
+										)) : (
 
-										<p className="text-red-500 text-sm text-center">There is no Item to be shown</p>
-									)}
+											<p className="text-red-500 text-sm text-center">There is no Item to be shown</p>
+										)}
+									</div>
 
 
 								</div>

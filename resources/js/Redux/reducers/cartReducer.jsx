@@ -20,6 +20,18 @@ const initialState = {
 
 const storInLocalStorage = (value) => localStorage.setItem("cart_token", value);
 
+const showToast = (text) => {
+	toast(text, {
+		position: "bottom-left",
+		autoClose: 4000,
+		hideProgressBar: false,
+		closeOnClick: true,
+		pauseOnHover: true,
+		draggable: true,
+		progress: undefined,
+		theme: "dark",
+	});
+}
 
 export const cartReducer = (state = initialState, action) => {
 
@@ -40,6 +52,7 @@ export const cartReducer = (state = initialState, action) => {
 		case ADD_TO_CART :
 			let cartItems = state.cartItems
 			const itemIndex = cartItems.findIndex(item => item.id === action.payload.product.id)
+
 			if(itemIndex >= 0){
 				let modifiedCartItems = cartItems.filter(item => item.id !== action.payload.product.id);
 

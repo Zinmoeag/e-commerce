@@ -30,7 +30,7 @@ class AuthController extends Controller
         $credential =  $request->only('email','password');
         
                 
-        $userType = User::where('email',$request['email'])->count() > 0 ? User::where('email',$request['email'])->first()->user_type : '';
+        $userType = User::where('email',$request['email'])->first()->user_type;
 
         if(Auth::attempt($credential) && $userType == "admin"){           
             return redirect('/admin/brands');

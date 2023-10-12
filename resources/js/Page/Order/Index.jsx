@@ -10,6 +10,7 @@ import UserInfoForm from './components/UserInfoForm'
 import {showCartApi} from '../../Api/apiUrl'
 import {useDispatch} from 'react-redux'
 import useBuy from '../../Hooks/useBuy'
+import useProduct from '../../Hooks/useProduct'
 
 const Order = ({authUser, authStatus}) => {
     const {cartType} = useParams();
@@ -24,10 +25,10 @@ const Order = ({authUser, authStatus}) => {
     const {resetingBuyCart} = useBuy();
 
 	const {token} = useParams();
-
-	console.log(token)
     const url = token ? showCartApi(token) : null;
     const {data, loading, error} = useFetcher(url);
+
+    const {addScore} = useProduct();
 
 
     useEffect(() => {
@@ -44,6 +45,9 @@ const Order = ({authUser, authStatus}) => {
     useEffect(() =>{
 
     	if(status === 201){
+    		addScore({
+    			order_id : orderId
+    		})
 			navigate(`/user/order/confirmation/${orderId}`)
 		}
 
@@ -78,6 +82,7 @@ const Order = ({authUser, authStatus}) => {
 				authUser = {authUser}
 				onSubmit = {onSubmit}
 				returnError = {returnError}
+				autoSetUserInfo = {true}
 			/>
 
 
@@ -88,6 +93,7 @@ const Order = ({authUser, authStatus}) => {
 					{data?.cartItem?.length !== 0 && data?.cartItem?.map((cartItem) => (
 						<CartItem
 							key={cartItem.id}
+							image={cartItem.image}
 							name={cartItem.name}
 							brand={cartItem.brand}
 							product_code={cartItem.product_code}

@@ -52,4 +52,10 @@ class Product extends Model
     public function carts(){
         return $this->belongsToMany(Cart::class,'cart_product')->withPivot('quantity');
     }
+
+
+    // ACCESSOR
+    protected function getImageAttribute($value){
+        return $value ? env('APP_URL').$value : null;
+    }
 }

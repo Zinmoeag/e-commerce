@@ -5,16 +5,15 @@ import withCategory from '../../Utilities/withCategory'
 import SlideInAnimation from '../../Components/SlideInAnimation'
 import CategoryDropDown from './components/CategoryDropDown'
 import BrandsDropDown from './components/BrandsDropDown'
-
 import FilterCategoryDropDown from './components/FilterCategoryDropDown'
 import FilterBrandDropDown from './components/FilterBrandDropDown'
-
 import Card from './components/Card.jsx'
 import {useScroll} from '../../Hooks/useScrollTop'
 import useProductQuery from '../../Hooks/useProductQuery'
 import {productApi} from '../../Api/apiUrl'
 import useFetcher from '../../Hooks/useFetcher'
 import Pagination from '../../Components/Pagination'
+import Footer from '../../Components/Footer'
 
 const Product = () => {
 
@@ -119,13 +118,10 @@ const Product = () => {
 										</SlideInAnimation>
 									</div>
 								)) : (
-									<div className="col-span-12 p-4 flex items-center justify-center h-[10rem]">
+									<div className="col-span-12 p-4 flex  justify-center h-[60rem]">
 										<p>Loading ...</p>
 									</div>
 								)}
-
-
-
 							</div>
 
 

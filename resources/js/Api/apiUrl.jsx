@@ -48,14 +48,18 @@ export const resetCartApi = (token) => {
 	return `/api/reset/cart/${token}`
 }
 
-export const createBuyTokenApi = (productCode,quantity) =>{
+export const createBuyTokenApi = (productCode,quantity) => { 
 	return `/api/buytoken/${productCode}?qty=${quantity}`
-}		
+}	
 
-export const getBuyingProductApi = (token) =>{
+
+export const getBuyingProductApi = (token) => {
 	return `/api/order/buy/${token}`
 }
 
+export const getOrder = (id) =>{
+	return `/api/orders/${id}`
+}
 export const orderCreateApi = () => {
 	return `/api/orders`
 }
@@ -64,8 +68,12 @@ export const deleteOrder = (id) => {
 	return `/api/orders/${id}`
 }
 
+export const editOrderAddressApi = (id) => {
+	return `/api/order/edit-address/${id}`
+}
+
 export const checkConfirmation = (id) => {
-	return `/api/orders/confirmation/${id}`
+	return `/api/order/confirmation/${id}`
 }
 
 export const register = () => {
@@ -91,3 +99,13 @@ export const updatePasswordApi = () => {
 export const updateEmailApi = () => {
 	return '/api/user/email/update'
 }
+
+
+//product score 
+export const addScoreApi  = () => {
+	return `/api/place/order`
+}
+
+export const bestSellerApi = () => {
+	return `api/best_seller/products`
+}	

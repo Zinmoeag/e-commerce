@@ -17,7 +17,6 @@ const useBuy = () => {
 	const navigate = useNavigate();
 
 	const fetchBuyCart = (buyData) => {
-
 		const url = createCartApi();
 		axiosClient.post(url,buyData)
 			.then(res => {

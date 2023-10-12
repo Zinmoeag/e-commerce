@@ -19,6 +19,18 @@ class OrderApiController extends Controller
         return response()->json(['orders' => $orders]);
     }
 
+    public function show(Order $order)
+    {
+        if(Gate::allows('checkConfirmation', $order)){
+            return response()->json(['order' => $order]);
+        }else{
+            return response([
+                "order" => "not authorized" ,
+            ],401);
+        }
+
+    }
+
     public function confirmation(Order $order)
     {
         //check if user requested order is his own order or not
@@ -41,7 +53,7 @@ class OrderApiController extends Controller
             'payment' => ['required', 'string'],
             'cart_token' => ['required']
         ],[
-            'cart_token' => "Product is not selected"
+            'cart_token' => "Products is not selected"
         ]);
 
         if ($validator->fails()) {
@@ -72,6 +84,20 @@ class OrderApiController extends Controller
                         "user_id" => $userId,
                         "quantity" => $product->pivot->quantity,
                     ]);
+
+                //stock qty
+                $substractedQty = $product->stock_qty - $product->pivot->quantity;
+
+                if($substractedQty < 0){
+                    return response()->json([
+                        "message" => [
+                            $product->id => 'only '.$product->stock_qty . " is avaliable"
+                        ]
+                    ],422);
+                }else{
+                    $product->stock_qty = $substractedQty;
+                    $product->save();
+                }
             }
 
             return response()->json([
@@ -83,56 +109,44 @@ class OrderApiController extends Controller
         }else{
             return response()->json(['message' => 'cart is not exist', 404]);
         }
-
     }
 
-    public function update($id)
+    public function updateAddress($id)
     {
         $order = Order::find($id);
+        //check if user requested order is his own order or not
+        if(Gate::allows('checkConfirmation', $order)){
 
-        if (!$order) {
-            return response()->json(['message' => 'Order not found'], 404);
+            if (!$order) {
+                return response()->json(['message' => 'Order not found'], 404);
+            }
+
+            $validator = Validator::make(request()->all(), [
+                'phone' => ['required', 'string'],
+                'address' => ['required', 'string'],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['message' => $validator->errors()], 422);
+            }
+
+            // Update the order
+            $order->update([
+                'order_date' => now(),
+                'phone' => request()->input('phone'),
+                'address' => request()->input('address'),
+                'total_price' => $order->total_price,
+            ]);
+
+            return response()->json([
+                'message' => 'Order updated Successfully'
+            ], 200);
+
+        }else{
+            return response([
+                "order" => "not authorized" ,
+            ],401);
         }
-
-        $validator = Validator::make(request()->all(), [
-            'order_date' => ['required', 'date'],
-            'phone' => ['required', 'string'],
-            'address' => ['required', 'string'],
-            'products.*.product_id' => ['required', 'exists:products,id'], // Validate product IDs
-            'products.*.quantity' => ['required', 'integer', 'min:1'], // Validate quantities
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['message' => $validator->errors()], 422);
-        }
-
-        $totalPrice = 0;
-
-        foreach (request()->input('products') as $product) {
-            $subtotal = $product['quantity'] * $product['price'];
-            $totalPrice += $subtotal;
-        }
-
-        //remove existed record in pivot
-        auth()->user()->orders()->detach($order->id);
-
-        // Update the order
-        $order->update([
-            'order_date' => request()->input('order_date'),
-            'phone' => request()->input('phone'),
-            'address' => request()->input('address'),
-            'total_price' => $totalPrice,
-        ]);
-
-        foreach (request()->input('products') as $product) {
-            $order->products()
-                ->attach($product['product_id'],[
-                    "user_id" => $id,
-                    "quantity" => 1
-                ]);
-        }
-
-        return response()->json(['message' => 'Order updated Successfully'], 200);
     }
 
     public function destroy($id)
@@ -153,21 +167,27 @@ class OrderApiController extends Controller
     }
 
     public function placeOrder(Request $request) {
+
         $orderId = $request->input('order_id');
+        $weight = 10;
+
 
         try {
             $order = Order::findOrFail($orderId);
+
             foreach ($order->products as $product) {
-                $product->increment('score');
+                $score = $product->pivot->quantity * $weight;
+                $product->increment('score', $score);
             }
 
             return response()->json([
                 'message' => 'Score incremented for all products',
-            ]);
+            ],200);
         } catch (\Exception $e) {
             return response()->json([
+                'e' => $request->input('order_id'),
                 'message' => 'Order not found or an error occurred.',
-            ]);
+            ],404);
         }
     }
 

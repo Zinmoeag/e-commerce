@@ -159,15 +159,16 @@ const Nav = ({setIsCartShow}) => {
 				</div>
 
 				<div className="flex items-center justify-center mt-[5rem] md:m-0">
-					<nav className="flex flex-col md:flex-row gap-8 justify-center items-center">
+					<nav className="flex flex-col md:flex-row gap-8 justify-center items-center h-full">
 						<LinkDropDown 
 							innerText={"Our Products"}
 							menu={dropdownMenu}
 						/>		
 						{/*<Link to="#brand" className="hover:text-skin-secondary">Brands</Link>*/}
-						<a href="#brand" className="hover:text-skin-secondary">Brands</a>
 						<Link to="/contact" className="hover:text-skin-secondary">Contact Us</Link>
-						<Link to="/about" className="hover:text-skin-secondary">About Us</Link>
+						<Link to="/contact" className="hover:text-skin-secondary">Contact Us</Link>
+						<Link to="/contact" className="hover:text-skin-secondary">Contact Us</Link>
+						<Link to="/about-us" className="hover:text-skin-secondary">About Us</Link>
 					</nav>
 				</div>
 			</div>

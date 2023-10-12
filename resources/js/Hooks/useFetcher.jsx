@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import axiosClient from "../Libs/axios-client.js";
 
-export default function useFetcher(uri){
+export default function useFetcher(uri, status = null){
 	
 	const [data, setData] = useState([]);
 	const [error, setError] = useState(null);
@@ -24,8 +24,6 @@ export default function useFetcher(uri){
 		 	setData(null);
 		 	setLoading(false)
 		 	setError(err.response ? err.response.status : 500)
-
-		 	console.log(err)
 		 })
 	}
 
@@ -34,7 +32,7 @@ export default function useFetcher(uri){
 		if(uri){
 			fetchingData(uri)
 		}
-	},[uri])
+	},[uri, status])
 
 	return {data,error,loading};
 }

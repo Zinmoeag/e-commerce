@@ -50,6 +50,7 @@ const Edit = ({authUser, authStatus}) => {
     const onSubmit = (cleanData) => {
 
     	const data = {
+    		photo : cleanData.photo,
     		username : cleanData.username,
     		phone : cleanData.phone,
     		address : JSON.stringify({city:cleanData.city, country:cleanData.country, address:cleanData.address})
@@ -77,10 +78,10 @@ const Edit = ({authUser, authStatus}) => {
  
 	return (
 		<>
-			<section id="user-edit">
+			<section id="user-edit" className="h-fit">
 
 				<div className="pt-4 md:px-8 px-4 text-slate-600">
-					<div className="md:w-[28rem] w-[22rem] h-[100vh]">
+					<div className="md:w-[28rem] w-[22rem]">
 						<h3 className="text-2xl text-slate-600 uppercase mb-6">Update Your Information</h3>
 						<form onSubmit={handleSubmit(onSubmit)}>
 
