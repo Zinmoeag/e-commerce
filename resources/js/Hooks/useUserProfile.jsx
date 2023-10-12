@@ -7,7 +7,7 @@ const useUserProfile = () => {
 
 		const url = userInfoUpdateApi();
 		setLoading(true);
-
+	
 		axiosClient.post(url,data,{
 			headers : {
 				'Content-Type': 'multipart/form-data'

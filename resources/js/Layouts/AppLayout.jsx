@@ -8,12 +8,13 @@ import {useSelector, useDispatch} from 'react-redux'
 import useAuth from '../Hooks/useAuth'
 import {fetchCart} from '../Redux/index'
 import {showCartApi} from '../Api/apiUrl'
+import {useAppStateContext} from '../Context/AppStateContext'
 
 const AppLayout = () => {
 
-	const [isCartShow, setIsCartShow] = useState(false)
 	const {getUser, authUser, authStatus} = useAuth({url:null})
 	const {token} = useSelector(state => state.cart)
+	const {isCartShow, setIsCartShow} = useAppStateContext()
 
 	const dispatch = useDispatch();
 

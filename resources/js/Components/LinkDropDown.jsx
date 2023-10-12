@@ -14,16 +14,20 @@ const LinkDropDown = ({innerText,menu}) => {
 
 	return (
 		<>
-			<div className="relative flex flex-col items-center justify-center md:block">
+			<div 
+				className="relative flex flex-col items-center justify-center md:block"
+				onMouseOver={() => setToggle(true)}
+				onMouseLeave={() => setToggle(false)}
+
+				
+			>
 				<button 
-					className="hover:text-skin-secondary text-center"
-					onClick={() => setToggle(prev => !prev)}
-				>	
-					{innerText}
+					className="hover:text-skin-secondary text-center h-full"
+				>{innerText}
 				</button>
 
 				<div 
-					className="bg-white dropdown-menu md:absolute relative md:right-0 mt-2"
+					className="bg-white dropdown-menu md:absolute relative md:right-0"
 					style = {dropdownMenu}
 				>
 					<div className="rounded-md shadow-lg  md:w-[10rem] w-[15rem]">
@@ -31,7 +35,9 @@ const LinkDropDown = ({innerText,menu}) => {
 							{menu.map(item => (
 								<li
 									key={item.id}
-									className="p-2 px-4 hover:text-skin-secondary cursor-pointer">
+									className="p-2 px-4 hover:text-skin-secondary cursor-pointer"
+									onClick = {() => setToggle(false)}
+									>
 									<Link to={item.link}>
 										{item.name}
 									</Link>

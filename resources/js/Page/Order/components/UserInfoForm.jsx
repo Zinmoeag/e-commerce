@@ -5,7 +5,7 @@ import Input from "../../../Components/Input";
 import Textarea from '../../../Components/Textarea'
 import {useState, useEffect} from 'react'
 
-const UserInfoForm = ({authUser,onSubmit,returnError}) => {
+const UserInfoForm = ({authUser,onSubmit,returnError,previousData=null,autoSetUserInfo=false}) => {
 	const {
         register,
         unregister,
@@ -17,25 +17,36 @@ const UserInfoForm = ({authUser,onSubmit,returnError}) => {
         formState: { errors },
     } = useForm();
 
-
     //for using profile address
-    const [useCustomerAddress ,setUseCustomerAddress] = useState(true)
-    const [useCustomerPhone ,setUseCustomerPhone] = useState(true)
+    const [useCustomerAddress ,setUseCustomerAddress] = useState(autoSetUserInfo)
+    const [useCustomerPhone ,setUseCustomerPhone] = useState(autoSetUserInfo)
 
    	useEffect(() => {
 
-		if(authUser.address){
-		let {city, country, address} = JSON.parse(authUser.address) ;
+   		if(previousData && !useCustomerAddress){
+   			let {city, country, address} = JSON.parse(previousData?.address);
+   			setValue('address',address)
+			setValue('city',city)
+			setValue('country',country)
+
+   		}else if(authUser.address && useCustomerAddress){
+			let {city, country, address} = JSON.parse(authUser?.address) ;
 			setValue('address',useCustomerAddress ? address : "")
 			setValue('city',useCustomerAddress ? city : "")
 			setValue('country',useCustomerAddress ? country : "")
+		}else{
+			setValue('address', "")
+			setValue('city', "")
+			setValue('country', "")
 		}
 
-		if(authUser.phone){
+		if(previousData && !useCustomerPhone){
+			setValue('phone', previousData.phone)
+		}else if(authUser.phone && useCustomerPhone){
 			let phone = authUser.phone;
 			setValue('phone', useCustomerPhone ? phone : "")
 		}
-	},[authUser , useCustomerAddress, useCustomerPhone])
+	},[authUser ,previousData, useCustomerAddress, useCustomerPhone])
 
 	return (
 		<div className='md:w-[28rem] w-full my-2 flex-none'>
@@ -154,7 +165,7 @@ const UserInfoForm = ({authUser,onSubmit,returnError}) => {
                 	type="submit"
                 	className='bg-slate-800 w-full py-1 text-white hover:bg-slate-700 my-4'
                 >
-                	Order Now
+                	Confirm
                 </button>
 			</form>
 		</div>

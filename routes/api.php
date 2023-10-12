@@ -30,7 +30,11 @@ Route::apiResource('/brand', BrandApiController::class)->parameters('brands', 's
 
 Route::apiResource('/orders',OrderApiController::class)->middleware('auth:sanctum');
 
-Route::get("/orders/confirmation/{order}", [OrderApiController::class, 'confirmation']);
+Route::prefix('order')->middleware('auth:sanctum')->group(function () { 
+    Route::get("/confirmation/{order}", [OrderApiController::class, 'confirmation']);
+    Route::post("/edit-address/{order}", [OrderApiController::class, 'updateAddress']);
+});
+
 
 Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();

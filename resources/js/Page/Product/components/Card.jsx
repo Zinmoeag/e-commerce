@@ -32,7 +32,7 @@ const Card = ({cardData}) => {
 						</div>
 					)}
 					<img 
-						src="http://localhost:8000/brand_imgs/Gucci/img_8.jpg "alt=""
+						src={cardData.image} alt=""
 						className='h-full w-full object-cover object-center'
 					/>
 				</div> 

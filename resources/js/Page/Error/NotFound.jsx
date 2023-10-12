@@ -1,5 +1,11 @@
-import {Link} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
+
 const NotFound = () => {
+
+    const navigate = useNavigate()
+    const handleGoBack = () => {
+        navigate(-1)
+    }
     return (
         <>
             <div className="h-[100vh] bg-slate-100 flex items-center justify-center">
@@ -14,7 +20,11 @@ const NotFound = () => {
                      <div className="w-[25rem] text-center px-5">
                         <h3 className="font-bold text-xl">This is Tony</h3>
                         <p>He want you go back to home page cuz Tony can't find the page u want.</p>
-                        <Link to="/pos" className="text-blue-600 mt-6">Go Back</Link>
+                        <button 
+                            onClick={handleGoBack}
+                            className="text-blue-600 mt-6"
+                            >Go Back
+                        </button>
                      </div>
 
                 </div>

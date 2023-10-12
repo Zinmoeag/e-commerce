@@ -19,9 +19,3 @@ export default function Main() {
     );
 
 }
-
-
-            // <RouterProvider
-            //     router = {router}
-            //     fallback = {<Home />}
-            // />
