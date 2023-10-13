@@ -1,8 +1,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
-import useFetcher from '../../../Hooks/useFetcher';
-import {bestSellerApi} from '../../../Api/apiUrl'
 import {Link} from 'react-router-dom'
+import {useSelector} from 'react-redux'
 
 
 // Import Swiper styles
@@ -17,25 +16,22 @@ const items = [1,2,3,4];
 
 const BestSeller = () => {
 	
-	const url = bestSellerApi();
 
-	const {data, error, loading} = useFetcher(url)
-
-	const {bestSeller} = data || [];
+	const {best_seller} = useSelector(state => state.product)
 
 	return (
-		<div className="my-20">
+		<div className="my-20 bg-slate-300">
 			<div className="lg:grid sm:grid-cols-12">
 				<div className="col-span-4">
 					<div className="text-center h-full px-4 lg:ms-8 ms-0 flex items-center justify-center mb-8 lg:mb-0">
 						<div>
-							<h3 className="lg:text-[3rem] text-[2rem] mb-5 uppercase font-bold text-slate-800 font-bold">Best Seller</h3>
-							<p className="text-xl font-light text-skin-coffee">Lorem ipsum dolor sit amet consectetur adipisicing, elit. Deserunt veniam unde minus odit doloribus nobis assumenda, voluptates magnam. Exercitationem odio rerum fugit, distinctio quasi, similique dolorum deleniti et totam! Eaque!</p>
+							<h3 className="lg:text-[3rem] text-[2rem] mb-5 uppercase font-bold text-skin-secondary font-bold">Best Seller</h3>
+							<p className="text-lg font-light text-slate-800">Lorem ipsum dolor sit amet consectetur adipisicing, elit. Deserunt veniam unde minus odit doloribus nobis assumenda, voluptates magnam. Exercitationem odio rerum fugit, distinctio quasi, similique dolorum deleniti et totam! Eaque!</p>
 						</div>
 					</div>
 				</div>
 
-				<div className="col-span-8 bg-skin-secondary md:pe-6">
+				<div className="col-span-8 bg-skin-secondary md:pe-4">
 					 <Swiper
 				 	  modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
 				      spaceBetween={0}
@@ -46,7 +42,7 @@ const BestSeller = () => {
 				      onSlideChange={() => {}}
 				    >
 				    {
-				    	bestSeller && bestSeller.map((item,i) => (
+				    	best_seller && best_seller.map((item,i) => (
 
 							      <SwiperSlide key={i}>
 								     <div className="md:h-[25rem] sm:h-[20rem] ">

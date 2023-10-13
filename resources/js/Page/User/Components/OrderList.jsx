@@ -20,22 +20,24 @@ const OrderList = () => {
 				</div>
 				<div className="">
 					<div className="pt-4">
-				    	<h3 className="text-blue-700 text-sm mb-4">Filter</h3>
 					    <div className="lg:w-[45rem] w-[100%] flex md:text-md text-sm">
 					      <table className="divide-y divide-gray-200 w-full">
 					        <thead>
-					          <tr>
-					            <th className="px-2 py-3 bg-slate-400 text-left leading-4 font-medium text-white uppercase tracking-wider">
+					          <tr className="bg-skin-secondary">
+					            <th className="px-2 py-3 text-left leading-4 font-medium text-white uppercase tracking-wider">
 					              Order ID
 					            </th>
-					            <th className="px-2 py-3 bg-slate-400 text-left leading-4 font-medium text-white uppercase tracking-wider">
+					            <th className="px-2 py-3 text-left leading-4 font-medium text-white uppercase tracking-wider">
 					              Order Date
 					            </th>
-					            <th className="px-2 py-3 bg-slate-400 text-left leading-4 font-medium text-white uppercase tracking-wider">
+					            <th className="px-2 py-3 text-left leading-4 font-medium text-white uppercase tracking-wider">
 					              FullFill
 					            </th>
-					            <th className="px-2 py-3 bg-slate-400 text-left leading-4 font-medium text-white uppercase tracking-wider">
+					            <th className="px-2 py-3 text-left leading-4 font-medium text-white uppercase tracking-wider">
 					              Total Amount
+					            </th>
+					           	<th className="px-2 py-3 text-left leading-4 font-medium text-white uppercase tracking-wider">
+					              Edit
 					            </th>
 					          </tr>
 					        </thead>
@@ -46,7 +48,7 @@ const OrderList = () => {
 						       			key={item.id}
 						  				id={item.id}
 						  				date={item.order_date}
-						  				fullfill={item.fullfill ? "delivered" : 'pending'}
+						  				fullfill={item.fullfill}
 						  				total={item.total_price}
 						       		/>
 					        	)) : (

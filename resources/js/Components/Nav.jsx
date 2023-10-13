@@ -9,26 +9,33 @@ import IconBtn from '../Components/IconBtn'
 import Searcher from '../Components/Searcher'
 import {useSelector} from 'react-redux'
 import UserDisplayText from '../Utilities/UserDisplayText'
-
-
-
-const dropdownMenu = [
-	{id:1, name:"Clothing", link:"/pos/products"},
-	{id:2, name:"Shoes", link:"/shoes"},
-]
+import {useAppStateContext} from '../Context/AppStateContext'
 
 
 const Nav = ({setIsCartShow}) => {
 
 	const {cartItems, totalQuantity} = useSelector(state => state.cart)
 	const {status, user} = useSelector(state => state.auth)
+	const {categories, brands} = useSelector(state => state.product)
 
-	// console.log(user.photo)
+
+	const categoryMenu = categories.map(item => {
+		return {
+			...item,
+			link : `/pos/products?c=${item.slug}`,
+		}
+	})
+
+	const brandMenu = brands.map(item => {
+		return {
+			...item,
+			link : `/pos/products?b=${item.slug}`,
+		}
+	})
+
 
 	const [isMobileSearchBarShow, setIsMobileSearchBarShow] = useState(false);
-
-	const [isNavShow, setIsNavShow] = useState(false)
-
+	const {isNavShow, setIsNavShow} = useAppStateContext();
 	const displayText = UserDisplayText(user ? user.name : " ")
 
 
@@ -61,8 +68,6 @@ const Nav = ({setIsCartShow}) => {
 							setIsShow={setIsMobileSearchBarShow}
 						/>
 					</div>
-
-					{/*controlls*/}
 
 					<div className="flex md:gap-8 gap-6 items-center justify-center">
 
@@ -141,8 +146,6 @@ const Nav = ({setIsCartShow}) => {
 				</div>
 			</div>
 
-			{/*nav*/}
-
 			<div
 				className={`${isNavShow ? "translate-x-0" : "translate-x-[-100%]"}
 									 md:translate-x-0 md:text-white text-slate-600 md:bg-slate-800 bg-slate-100 py-1 px-8 
@@ -159,14 +162,18 @@ const Nav = ({setIsCartShow}) => {
 				</div>
 
 				<div className="flex items-center justify-center mt-[5rem] md:m-0">
-					<nav className="flex flex-col md:flex-row gap-8 justify-center items-center h-full">
-						<LinkDropDown 
+					<nav className="flex flex-col md:flex-row gap-8  justify-center items-center h-full">
+						<LinkDropDown
+							onClick={() =>setIsNavShow(false)}
 							innerText={"Our Products"}
-							menu={dropdownMenu}
+							menu={categoryMenu || []}
 						/>		
-						{/*<Link to="#brand" className="hover:text-skin-secondary">Brands</Link>*/}
-						<Link to="/contact" className="hover:text-skin-secondary">Contact Us</Link>
-						<Link to="/contact" className="hover:text-skin-secondary">Contact Us</Link>
+
+						<LinkDropDown
+							onClick={() =>setIsNavShow(false)}
+							innerText={"Collected Brand"}
+							menu={brandMenu || []}
+						/>
 						<Link to="/contact" className="hover:text-skin-secondary">Contact Us</Link>
 						<Link to="/about-us" className="hover:text-skin-secondary">About Us</Link>
 					</nav>

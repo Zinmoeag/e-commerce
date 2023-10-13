@@ -1,14 +1,12 @@
 import useFetcher from '../Hooks/useFetcher'
-import {categoryApi} from '../Api/apiUrl'
+import {useSelector} from 'react-redux'
 
 const withCategory = (WrappedComponent) => {
 	return (props) => {
 
+		const {categories} = useSelector(state => state.product)
 
-		const url = categoryApi();
-		const {data} = useFetcher(url)
-
-		return <WrappedComponent {...props} data={data} />
+		return <WrappedComponent {...props} data={categories} />
 
 	}
 }

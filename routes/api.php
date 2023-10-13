@@ -81,3 +81,4 @@ Route::controller(CartApiController::class)->group(function(){
 // For Best-Seller
 Route::match(['get','post'],'place/order',[OrderApiController::class,'PlaceOrder']);
 Route::match(['get','post'],'best_seller/products',[ProductApiController::class,'BestSellerProducts']);
+Route::match(['get','post'],'random/products',[ProductApiController::class,'RandomProduct']);

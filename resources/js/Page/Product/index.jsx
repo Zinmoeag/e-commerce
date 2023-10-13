@@ -7,7 +7,7 @@ import CategoryDropDown from './components/CategoryDropDown'
 import BrandsDropDown from './components/BrandsDropDown'
 import FilterCategoryDropDown from './components/FilterCategoryDropDown'
 import FilterBrandDropDown from './components/FilterBrandDropDown'
-import Card from './components/Card.jsx'
+import Card from '../../Components/Card.jsx'
 import {useScroll} from '../../Hooks/useScrollTop'
 import useProductQuery from '../../Hooks/useProductQuery'
 import {productApi} from '../../Api/apiUrl'
@@ -17,10 +17,10 @@ import Footer from '../../Components/Footer'
 
 const Product = () => {
 
-	useScroll();
 	const {url, search, setQuery} = useProductQuery();
 	const {data, loading, error } = useFetcher(url);
 
+	useScroll(data);
 	const items = data?.data;
 	const hasItems = !loading && items?.length > 0;
 
@@ -38,7 +38,6 @@ const Product = () => {
 			p : page
 		})
 	}
-
 
 	return (
 		<div className="relative flex" id="products">

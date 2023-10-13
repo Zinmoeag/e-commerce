@@ -11,3 +11,7 @@ export const RESET_ITEMS = 'RESET_ITEMS'
 
 export const CREATE_BUY_CART = 'CREATE_BUY_CART'
 export const RESET_CART = 'RESET_CART'
+
+export const FETCH_BRAND = 'FETCH_BRAND'
+export const FETCH_CATEGORY = 'FETCH_CATEGORY'
+export const FETCH_BEST_SELLER = 'FETCH_BEST_SELLER'

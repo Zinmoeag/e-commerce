@@ -166,7 +166,15 @@ class ProductApiController extends Controller
         $bestSeller = Product::orderBy('score','desc')->take(5)->get();
         return response()->json([
             'message'=>'These are best seller products',
-            'bestSeller'=>$bestSeller]);
+            'bestSeller'=>$bestSeller
+        ]);
+    }
+
+    public function RandomProduct(){
+        $randomProduct = Product::inRandomOrder()->take(3)->get();
+        return response()->json([
+            'random'=> $randomProduct,
+        ],200);
     }
 }
 

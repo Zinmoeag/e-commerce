@@ -15,6 +15,10 @@ export const productShowApi = (productCode) => {
 }
 
 
+export const randomProductApi = () => {
+	return `/api/random/products`
+}
+
 export const userOrderApi = () => {
 	return `/api/orders`
 }
@@ -107,5 +111,5 @@ export const addScoreApi  = () => {
 }
 
 export const bestSellerApi = () => {
-	return `api/best_seller/products`
+	return `/api/best_seller/products`
 }	
