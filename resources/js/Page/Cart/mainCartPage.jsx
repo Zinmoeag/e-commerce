@@ -4,6 +4,7 @@ import {useSelector, useDispatch} from 'react-redux'
 import MainCartItem from './components/MainCartItem'
 import {resetingCart} from '../../Redux/index'
 import {Link} from 'react-router-dom'
+import RandomProduct from '../../Components/RandomProduct'
 
 const MainCartPage = () => {
 
@@ -82,6 +83,7 @@ const MainCartPage = () => {
 				</div>
 			</div>
 
+			<RandomProduct />
 		</section>
 	)
 }

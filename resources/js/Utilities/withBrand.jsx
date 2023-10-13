@@ -1,14 +1,12 @@
 import useFetcher from '../Hooks/useFetcher'
-import {brandApi} from '../Api/apiUrl'
+import {useSelector} from 'react-redux'
 
 const withBrand = (WrappedComponent) => {
 	return (props) => {
 
+		const {brands} = useSelector(state => state.product)
 
-		const url = brandApi();
-		const {data} = useFetcher(url)
-
-		return <WrappedComponent {...props} data={data} />
+		return <WrappedComponent {...props} data={brands} />
 
 	}
 }

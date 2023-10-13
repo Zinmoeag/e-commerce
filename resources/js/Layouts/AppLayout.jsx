@@ -8,13 +8,20 @@ import {useSelector, useDispatch} from 'react-redux'
 import useAuth from '../Hooks/useAuth'
 import {fetchCart} from '../Redux/index'
 import {showCartApi} from '../Api/apiUrl'
+import useProduct from '../Hooks/useProduct'
 import {useAppStateContext} from '../Context/AppStateContext'
 
 const AppLayout = () => {
 
+	const product = useSelector(state => state.product)
+
+	const {brands, categories, best_seller} = product;
+
 	const {getUser, authUser, authStatus} = useAuth({url:null})
 	const {token} = useSelector(state => state.cart)
-	const {isCartShow, setIsCartShow} = useAppStateContext()
+	const {isCartShow, setIsCartShow} = useAppStateContext();
+	const {fetchBrand, fetchCategory, fetchBestSeller} = useProduct();
+
 
 	const dispatch = useDispatch();
 
@@ -22,6 +29,20 @@ const AppLayout = () => {
 		if(!authStatus){
 			getUser()
 		}
+
+		if(brands.length <= 0){
+			fetchBrand()
+		}
+
+		if(categories.length <= 0){
+			fetchCategory()
+		}
+
+		if(best_seller <= 0){
+			fetchBestSeller()
+		}
+
+
 	},[authStatus])
 
 
