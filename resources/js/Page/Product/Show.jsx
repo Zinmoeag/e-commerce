@@ -30,7 +30,6 @@ const ProductShow = () => {
 	},[code])
 
 	const [quantity, setQuantity] = useState(0);
-
 	const {data,loading,error} = useFetcher(url);
 	const pricePerOneItem = data?.price;
 	const totalPrice = quantity * pricePerOneItem;

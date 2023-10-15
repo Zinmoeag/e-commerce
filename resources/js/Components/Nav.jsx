@@ -174,7 +174,6 @@ const Nav = ({setIsCartShow}) => {
 							innerText={"Collected Brand"}
 							menu={brandMenu || []}
 						/>
-						<Link to="/contact" className="hover:text-skin-secondary">Contact Us</Link>
 						<Link to="/about-us" className="hover:text-skin-secondary">About Us</Link>
 					</nav>
 				</div>
