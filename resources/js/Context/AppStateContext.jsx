@@ -1,4 +1,4 @@
-import {useState, useEffect, createContext , useContext , useMemo} from "react"
+import {useState, useEffect, createContext , useContext , useMemo, useRef} from "react"
 
 const appStateContext = createContext();
 
@@ -6,6 +6,7 @@ export const AppStateProvider = ({children}) => {
 
 	const [isCartShow, setIsCartShow] = useState(false)
 	const [isNavShow, setIsNavShow] = useState(false)
+	const loaderRef = useRef(null)
 
 
 	return (
@@ -14,7 +15,8 @@ export const AppStateProvider = ({children}) => {
 				isCartShow, 
 				setIsCartShow,
 				isNavShow,
-				setIsNavShow
+				setIsNavShow,
+				loaderRef
 			}} 
 		>
 			{children}

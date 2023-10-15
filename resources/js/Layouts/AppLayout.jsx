@@ -10,19 +10,17 @@ import {fetchCart} from '../Redux/index'
 import {showCartApi} from '../Api/apiUrl'
 import useProduct from '../Hooks/useProduct'
 import {useAppStateContext} from '../Context/AppStateContext'
+import Loader from '../Components/Loader'
+
 
 const AppLayout = () => {
 
 	const product = useSelector(state => state.product)
-
 	const {brands, categories, best_seller} = product;
-
 	const {getUser, authUser, authStatus} = useAuth({url:null})
 	const {token} = useSelector(state => state.cart)
 	const {isCartShow, setIsCartShow} = useAppStateContext();
 	const {fetchBrand, fetchCategory, fetchBestSeller} = useProduct();
-
-
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -56,7 +54,8 @@ const AppLayout = () => {
 	},[token])
 
 	return (
-		<>
+		<>	
+			<Loader />
 			<section className="bg-indigo-100" >
 				<Nav
 					setIsCartShow={setIsCartShow}

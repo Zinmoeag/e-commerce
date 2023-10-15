@@ -3,20 +3,23 @@ import axios from 'axios'
 import {useEffect} from 'react' 
 import {setAuthUserSuccess, setAuthUserFail} from '../Redux/index'
 import {useSelector, useDispatch} from 'react-redux'
+import useLoader from '../Hooks/useLoader'
 
 
 const useAuth = ({url}) => {
 
 	const {user,status} = useSelector( state => state.auth)
+	const {startLoading, complete} = useLoader()
 
 	const dispatch = useDispatch();
 
 	const csrf = () => axiosClient.get("/sanctum/csrf-cookie");
 
 	const getUser = () => {
+		startLoading()
 		axiosClient.get('/api/user')
 		.then(res => {
-
+			complete()
 			if(res.status === 200){
 				dispatch(setAuthUserSuccess({
 					user : res.data,
@@ -25,6 +28,7 @@ const useAuth = ({url}) => {
 			}
 		})
 		.catch(err => {
+			complete()
 			if(err.response.status === 401){
 				dispatch(setAuthUserFail({
 					status : err.response.status
@@ -38,13 +42,16 @@ const useAuth = ({url}) => {
 	const signUp = async ({data,setError, setStatus}) => {
 
 		await csrf();
+		startLoading()
 
 		axiosClient.post(url,data)
 			.then(res => {
+				complete()
 				setStatus(res.status)
 				getUser()
 			})
 			.catch(err => {
+				complete()
 				if(err.response.status === 422){
 					setError(err.response.data.message)
 				}
@@ -55,13 +62,16 @@ const useAuth = ({url}) => {
 	const login = async ({data,setError, setStatus}) => {
 
 		await csrf();
+		startLoading()
 
 		axiosClient.post(url,data)
 			.then(res => {
+				complete()
 				setStatus(res.status)
 				getUser()
 			})
 			.catch(err => {
+				complete()
 				if(err.response.status === 422){
 					setError(err.response.data.message)
 				}
@@ -73,21 +83,25 @@ const useAuth = ({url}) => {
 	}
 
 	const logout = async ({setStatus}) => {
-
+		startLoading()
 	 	await axiosClient.post("/api/logout")
-		.then(res => getUser())
+		.then(res => {
+			complete()
+			getUser()
+		})
 	}
 
 	const updatePassword = async ({data, setStatus, setError}) => {
 
-		// console.log(url, data)
-
 		await csrf();
+		startLoading()
 		axiosClient.post(url,data)
 			.then(res => {
+				complete()
 				setStatus(res.status)
 			})
 			.catch(err => {
+				complete()
 				if(err.response.status === 422){
 					setError(err.response.data.errors)
 				}
@@ -101,14 +115,15 @@ const useAuth = ({url}) => {
 
 	const updateEmail = async ({data, setStatus, setError}) => {
 
-		// console.log(url, data)
-
 		await csrf();
+		startLoading()
 		axiosClient.post(url,data)
 			.then(res => {
+				complete()
 				setStatus(res.status)
 			})
 			.catch(err => {
+				complete()
 				if(err.response.status === 422){
 					setError(err.response.data.errors)
 				}
