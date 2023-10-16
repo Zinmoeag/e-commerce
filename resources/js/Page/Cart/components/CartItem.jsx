@@ -75,13 +75,14 @@ const CartItem = ({cartItem}) => {
 						<p>{cartItem.pivot.total_price} Ks</p>
 					</div>
 				</div>
-				<div className="px-2 flex items-center absolute right-0 top-0 text-red-600">
-					<button>
-						<IconBtn 
-							icon={faXmark}
-							onClick={handleRemoveItem}
-						/>
-					</button>
+				<div 
+					className="px-2 flex items-center absolute right-0 top-0 text-red-600 cursor-pointer z-20"
+					onClick={handleRemoveItem}
+				>
+					<IconBtn 
+						icon={faXmark}
+
+					/>
 
 				</div>
 
